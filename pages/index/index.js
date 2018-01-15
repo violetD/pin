@@ -8,6 +8,8 @@ Page({
     userInfo: {},
     text: "",
     time: "30秒",
+    timeValue: 30,
+    setTime: "",
     tips: "0.00",
     items: [{
       name: '10秒',
@@ -17,12 +19,18 @@ Page({
       value: 20
     }, {
       name: '30秒',
-      value: 30,
-      checked: true
-    }]
+      value: 30
+    }],
+    showModal: false
   },
   //事件处理函数
   onLoad: function () {
+
+    wx.switchTab({
+      url: '/pages/me/me',
+    })
+    return;
+
     var that = this
     //调用应用实例的方法获取全局数据
     app.getUserInfo(function(userInfo){
@@ -37,15 +45,36 @@ Page({
       text: this.data.textRange[e.detail.value]
     })
   },
-  selectTime: function () {
-    wx.showModal({
-      title: '设置挑战时间',
-      content: '',
-      showCancel: false,
-      success: function () {
-
-      }
+  setMoney: function (e) {
+    this.setData({
+      tips: e.detail.value * 0.03
     })
+  },
+  showSetTime: function () {
+    this.setData({
+      setTime: this.data.timeValue,
+      showModal: true
+    })
+  },
+  hideModal: function () {
+    this.setData({
+      showModal: false
+    })
+  },
+  setTime: function (e) {
+    this.setData({
+      setTime: e.detail.value
+    })
+  },
+  onCancel: function () {
+    this.hideModal();
+  },
+  onConfirm: function () {
+    this.setData({
+      timeValue: this.data.setTime,
+      time: this.data.setTime + "秒"
+    })
+    this.hideModal();
   },
   showError: function (message) {
     wx.showModal({

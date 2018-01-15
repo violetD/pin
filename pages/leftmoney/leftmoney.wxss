@@ -1,0 +1,59 @@
+/* pages/leftmoney/leftmoney.wxss */
+.leftmoney-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  line-height: 2em;
+  margin-bottom: 2em;
+  padding-top: 2em;
+}
+
+.leftmoney-info .desc {
+  color: #aaa;
+}
+
+.leftmoney-info .leftmoney {
+  font-size: 2em;
+}
+
+.leftmoney-detail {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  margin-bottom: 3em;
+}
+
+.leftmoney-detail view {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 1em;
+  line-height: 2em;
+  border-bottom: 2px solid #dedede;
+}
+
+.leftmoney-detail input {
+  line-height: 2em;
+  height: 2em;
+  padding: 0 1em;
+}
+
+.btn-link {
+  color: blue;
+  text-decoration: underline;
+}
+
+.btn-area {
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-area button {
+  width: 100%;
+}
+
+.btn-area .desc {
+  color: #aaa;
+  text-align: center;
+  font-size: .8em;
+}

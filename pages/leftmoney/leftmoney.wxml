@@ -1,0 +1,22 @@
+<view class="wrapper">
+  <view class="leftmoney-info">
+    <text class="desc">我的余额</text>
+    <text class="leftmoney">¥{{leftmoney}}</text>
+  </view>
+  <view class="leftmoney-detail">
+    <view>
+      <text>¥</text>
+      <input type="digit" value="{{withdrawals}}" />
+      <text class="btn-link" bindtap="bindTap">全部提现</text>
+    </view>
+    <view>
+      <text>提现中金额</text>
+      <text>{{inWithdrawals}}</text>
+    </view>
+  </view>
+  <view class="btn-area">
+    <button type="primary">提现</button>
+    <text class="desc">提现金额将在1-5个工作日打到您微信零钱当中</text>
+    <text class="desc">平台不收取任何手续费</text>
+  </view>
+</view>

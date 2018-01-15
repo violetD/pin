@@ -6,4 +6,17 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-} 
+}
+
+.wrapper {
+  background-color: #dedede;
+  height: 100vh;
+}
+
+button[type="primary"] {
+  background-color: #B31800
+}
+
+.button-hover[type="primary"] {
+  background-color: #560d02
+}

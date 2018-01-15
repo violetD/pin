@@ -23,7 +23,7 @@
         <view class="section section-gap">
           <label>
             <text class="label-text">总赏金</text>
-            <input type="digit" name="money" placeholder="填写金额"/>元
+            <input type="digit" name="money" bindinput="setMoney" placeholder="填写金额"/>元
           </label>    
         </view>
         <view class="section section-gap">
@@ -36,21 +36,35 @@
           <label>
             <text class="label-text">挑战时间</text>
             <input type="digit" name="time" value="{{time}}" disabled="true" />
-            <image mode="aspectFit" class="input-image" src="../../assets/images/forward.png" bindtap="selectTime"></image>
+            <image mode="aspectFit" class="input-image" src="../../assets/images/forward.png" bindtap="showSetTime"></image>
           </label>    
         </view>
         <view class="section">
-          <button formType="submit">生成拼字红包</button>
+          <button type="primary" formType="submit">生成拼字红包</button>
         </view>
-          <radio-group class="radio-group">
-            <label class="radio" wx:for="{{items}}" checked="{{item.checked}}">
-              <radio value="{{item.name}}" checked="{{item.checked}}" />{{item.value }}
-            </label>
-          </radio-group>
         <view class="section center">
           <text class="description-text">需支付￥{{tips}}服务费，优先使用余额￥0.00</text>
         </view>
       </form>
+    </view>
+  </view>
+  <!--弹窗-->
+  <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+  <view class="modal-dialog" wx:if="{{showModal}}">
+    <view class="modal-title">设置挑战时间</view>
+    <view class="modal-content">
+      <radio-group class="radio-group" bindchange="setTime">
+        <label class="radio {{item.value==setTime ? 'checked' : ''}}" wx:for="{{items}}" wx:key="{{item.value}}">
+          <radio value="{{item.value}}" checked="{{item.value==setTime ? true : false}}" />{{item.value}}秒
+        </label>
+      </radio-group>
+      <view class="modal-input">
+        <input type="number" value="{{setTime}}" bindinput="setTime" class="input"></input>秒
+      </view>    
+    </view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="onCancel" data-status="cancel">取消</view>
+      <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
     </view>
   </view>
 </view>

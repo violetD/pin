@@ -1,0 +1,61 @@
+/* pages/me/me.wxss */
+@import "../../assets/font/iconfont.wxss";
+
+.wrapper {
+  background-color: #dedede;
+  font-size: .8rem;
+  height: 100vh;
+}
+
+.center {
+  text-align: center;
+}
+
+.card-view {
+  background-color: #fff;
+  position: relative;
+  padding: 2rem 0;
+  box-shadow: 2px 2px 5px #bbb;
+  width: 100%;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  margin-bottom: 50rpx;
+}
+
+.btn-area {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.btn-area .navigator {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: #333;
+}
+
+.btn-area .navigator-icon {
+  font-size: 45px;
+}
+
+.btn-area .navigator-divide {
+  width: 2px;
+  background: #dedede;
+  display: block;
+}
+
+.btn-area .navigator-icon-text {
+  font-size: 35px;
+}

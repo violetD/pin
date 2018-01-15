@@ -1,0 +1,23 @@
+/* hongbao.wxss */
+.swiper-tab {  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: center;  
+  line-height: 80rpx;
+  background-color: #FFF;
+}
+
+.swiper-tab-list {
+  font-size: 30rpx;
+  color: #777777;  
+}
+
+.swiper-tab-list.on {
+  color: #B31800;  
+  border-bottom: 5rpx solid #B31800;
+}  
+  
+.swiper-box {
+  height: calc(100vh-30rpx)
+} 

@@ -1,33 +1,36 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/me/me",
+    "pages/hongbao/hongbao",
+    "pages/leftmoney/leftmoney"
   ],
   "window":{
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
-    "navigationBarTextStyle":"black"
+    "navigationBarTitleText": "拼红包",
+    "navigationBarTextStyle":"black",
+    "backgroundColor": "#cccccc"
   },
   "tabBar": {
-    "color": "#f4ea2a",
-    "selectedColor": "rgb(127, 119, 80)",
+    "color": "#333",
+    "selectedColor": "#B31800",
     "borderStyle": "#cccccc",
     "backgroundColor": "#ffffff",
     "list": [{
       "pagePath": "pages/index/index",
       "iconPath": "assets/images/add.png",
-      "selectedIconPath": "",
+      "selectedIconPath": "assets/images/add_s.png",
       "text": "发一个"
     }, {
       "pagePath": "pages/index/index",
       "iconPath": "assets/images/rank.png",
-      "selectedIconPath": "",
+      "selectedIconPath": "assets/images/rank_s.png",
       "text": "排行榜"
     }, {
-      "pagePath": "pages/index/index",
+      "pagePath": "pages/me/me",
       "iconPath": "assets/images/me.png",
-      "selectedIconPath": "",
+      "selectedIconPath": "assets/images/me_s.png",
       "text": "我的"
     }]
   }
