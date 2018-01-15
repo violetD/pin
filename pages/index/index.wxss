@@ -1,0 +1,80 @@
+/**index.wxss**/
+.wrapper {
+  background-color: #dedede;
+  font-size: .8rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.card-view {
+  background-color: #fff;
+  position: relative;
+  padding: 2rem 1rem 1rem;
+  box-shadow: 2px 2px 5px #bbb;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  position: absolute;
+  top: -64rpx;
+}
+
+.section-gap {
+  margin-bottom: 1rem;
+}
+
+input {
+  display: inline-block;
+  line-height: 1.4rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #ccc;
+  padding: .5rem 1rem;
+}
+
+.label-text {
+  display: inline-block;
+  width: 120rpx;
+  line-height: 1.4rem;
+  margin-right: .5rem;
+  vertical-align: middle;
+  text-align: right;
+}
+
+.description-text {
+  font-size: .6rem;
+  color: #ccc;
+}
+
+.input-picker {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.input-picker view {
+  display: inline;
+}
+
+.input-image {
+  width: 1em;
+  height: 1em;
+}
+
+.radio-group radio {
+  display: none;
+}
+.radio-group label {
+  border: 1px solid #ccc;
+  padding: 1em;
+  border-radius: 50%;  
+}

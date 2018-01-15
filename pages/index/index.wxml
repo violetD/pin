@@ -1,0 +1,56 @@
+<!--index.wxml-->
+<view class="wrapper">
+  <view class="container">
+    <view class="card-view">
+      <view class="userinfo">
+        <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      </view>
+      <form bindsubmit="formSubmit" bindreset="formReset">
+        <view class="section">
+          <label>
+            <text class="label-text">设置文字</text>
+            <input name="text" value="{{text}}" placeholder="请输入文字(24字内)" maxlength="24"/>
+            <picker class="input-picker" mode="selector" range="{{textRange}}" bindchange="setTextValue">
+              <view>
+                <image mode="aspectFit" class="input-image" src="../../assets/images/extend.png"></image>
+              </view>
+            </picker>
+          </label>    
+        </view>
+        <view class="section section-gap">
+          <text class="description-text">小伙伴们拼接文字即可获得随机红包</text>
+        </view>
+        <view class="section section-gap">
+          <label>
+            <text class="label-text">总赏金</text>
+            <input type="digit" name="money" placeholder="填写金额"/>元
+          </label>    
+        </view>
+        <view class="section section-gap">
+          <label>
+            <text class="label-text">数量</text>
+            <input type="number" name="number" placeholder="填写数量"/>个
+          </label>    
+        </view>
+        <view class="section section-gap">
+          <label>
+            <text class="label-text">挑战时间</text>
+            <input type="digit" name="time" value="{{time}}" disabled="true" />
+            <image mode="aspectFit" class="input-image" src="../../assets/images/forward.png" bindtap="selectTime"></image>
+          </label>    
+        </view>
+        <view class="section">
+          <button formType="submit">生成拼字红包</button>
+        </view>
+          <radio-group class="radio-group">
+            <label class="radio" wx:for="{{items}}" checked="{{item.checked}}">
+              <radio value="{{item.name}}" checked="{{item.checked}}" />{{item.value }}
+            </label>
+          </radio-group>
+        <view class="section center">
+          <text class="description-text">需支付￥{{tips}}服务费，优先使用余额￥0.00</text>
+        </view>
+      </form>
+    </view>
+  </view>
+</view>
