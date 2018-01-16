@@ -26,6 +26,10 @@ Page({
   //事件处理函数
   onLoad: function () {
 
+    wx.redirectTo({
+      url: '/pages/game/game',
+    })
+    return;
     wx.switchTab({
       url: '/pages/rank/rank',
     })

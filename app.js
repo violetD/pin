@@ -83,16 +83,21 @@ App({
 
   request: function (url, data) {
     return new Promise(function (resolve, reject) {
-      wx.request({
-        url: url,
-        data: data,
-        success: function () {
-          resolve();
-        },
-        fail: function () {
-          reject();
-        }
-      })
+      setTimeout(function () {
+        resolve();
+        // reject();
+      }, 5000);
+      // TODO
+      // wx.request({
+      //   url: url,
+      //   data: data,
+      //   success: function () {
+      //     resolve();
+      //   },
+      //   fail: function () {
+      //     reject();
+      //   }
+      // })
     });
   },
 

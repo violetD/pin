@@ -1,0 +1,138 @@
+/* pages/game/game.wxss */
+@import "../../assets/font/iconfont.wxss";
+
+.game-view {
+  background-color: #B31800;
+  padding-top: 50rpx;
+  color: #fff;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  border: 5rpx solid #fff;
+  margin-bottom: 50rpx;
+}
+
+.question-area {
+  text-align: center;
+  color: #e7c41f;
+  margin-bottom: 50rpx;
+}
+
+.op-area {
+  margin-bottom: 50rpx;
+  text-align: center;
+}
+
+button[type=primary] {
+  color: #B31800;
+  background-color: #e7c41f;
+  width: 80%;
+}
+
+button[type=default] {
+  color: #fff;
+  background-color: #d04934;
+  width: 80%;
+}
+
+.btn-area {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 25rpx;
+}
+
+.info-area {
+  color: #666;
+  font-size: .8em;
+  padding-left: 1em;
+  margin-bottom: 100rpx;
+}
+
+.desc-area {
+  color: #999;
+  font-size: .8em;
+  text-align: center;
+}
+
+.countdown {
+  border: 2px solid #B31800;
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  text-align: center;
+  line-height: 2em;
+  margin: 0 auto;
+}
+
+.result {
+  text-align: center;
+  color: #B31800;
+  margin-top: .5em;
+}
+
+.words-area {
+  display: flex;
+  margin-top: .5em;
+}
+
+.words-area .word {
+  display: block;
+  border: 1px solid #ccc;
+  margin-right: .5em;
+  padding: 5rpx 10rpx;
+  border-radius: 10rpx;
+}
+
+.words-area .word.checked {
+  border-color: #B31800;
+  background-color: #B31800;
+  color: #fff;
+}
+
+/* 弹窗 */
+.modal-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+  z-index: 9000;
+  color: #fff;
+}
+
+.modal-dialog {
+  width: 540rpx;
+  overflow: hidden;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  z-index: 9999;
+  background: #f9f9f9;
+  margin: -180rpx 105rpx;
+  border-radius: 6rpx;
+}
+
+.modal-title {
+  padding-top: 50rpx;
+  font-size: 36rpx;
+  color: #030303;
+  text-align: center;
+}
+
+.modal-content {
+  padding: 50rpx 32rpx;
+}

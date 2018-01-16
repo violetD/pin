@@ -4,7 +4,8 @@
     "pages/me/me",
     "pages/hongbao/hongbao",
     "pages/leftmoney/leftmoney",
-    "pages/rank/rank"
+    "pages/rank/rank",
+    "pages/game/game"
   ],
   "window":{
     "backgroundTextStyle": "light",
