@@ -27,7 +27,7 @@ Page({
   onLoad: function () {
 
     wx.switchTab({
-      url: '/pages/me/me',
+      url: '/pages/rank/rank',
     })
     return;
 
@@ -36,7 +36,7 @@ Page({
     app.getUserInfo(function(userInfo){
       //更新数据
       that.setData({
-        userInfo:userInfo
+        userInfo: userInfo
       })
     })
   },
