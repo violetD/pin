@@ -6,7 +6,7 @@ Page({
   data: {
     userInfo: {},
     enabled: true,
-    showModal: true,
+    showModal: false,
     words: [{
       text: '吧',
       checked: false
@@ -23,7 +23,8 @@ Page({
       text: '们',
       checked: false
     }],
-    resultWords: '厉我'
+    resultWords: '厉我',
+    leftTime: 10
   },
   //事件处理函数
   onLoad: function () {
@@ -35,6 +36,23 @@ Page({
         userInfo: userInfo
       })
     })
+  },
+  interval: null,
+  showModal: function () {
+    const that = this;
+    this.setData({
+      showModal: true
+    })
+
+    this.interval = setInterval(function () {
+      that.setData({
+        leftTime: that.data.leftTime - 1
+      })
+      if (that.data.leftTime <= 0) {
+        clearInterval(that.interval);
+        console.log('out time')
+      }
+    }, 1000);
   },
   hideModal: function () {
     this.setData({

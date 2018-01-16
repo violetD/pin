@@ -9,7 +9,7 @@
       <text>我们厉害吧</text>
     </view>
     <view class="op-area">
-      <button wx:if="{{enabled}}" type="primary">点击拼出上面的文字领红包</button>  
+      <button wx:if="{{enabled}}" type="primary" bindtap="showModal">点击拼出上面的文字领红包</button>  
       <button wx:else type="default">红包已失效</button>
     </view>
     <view class="btn-area">
@@ -36,7 +36,7 @@
   <view class="modal-dialog" wx:if="{{showModal}}">
     <view class="modal-title">提示：请按顺序勾选</view>
     <view class="modal-content">
-      <view class="countdown"><text>30</text></view>
+      <view class="countdown"><text>{{leftTime}}</text></view>
       <view class="result">{{resultWords}}</view>
       <view class="words-area">
         <text class="word {{word.checked ? 'checked' : ''}}" wx:for="{{words}}" wx:for-item="word" wx:key="text" bindtap="bindTap" data-index="{{index}}">{{word.text}}</text>
