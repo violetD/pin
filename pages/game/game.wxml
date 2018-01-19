@@ -17,7 +17,7 @@
         <i class="iconfont icon-money navigator-icon"></i>
         <text class="navigator-text">去提现</text>
       </navigator>
-      <navigator class="navigator" url="/pages/hongbao/hongbao" hover-class="navigator-hover">
+      <navigator class="navigator" url="/pages/index/index" open-type="switchTab" hover-class="navigator-hover">
         <i class="iconfont icon-add-r navigator-icon"></i>
         <text class="navigator-text">我要发一个</text>
       </navigator>

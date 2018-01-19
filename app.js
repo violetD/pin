@@ -11,6 +11,19 @@ App({
       success: function (res) {
         if (res.code) {
           // 发起网络请求
+          wx.request({
+            url: 'https://api.weixin.qq.com/cgi-bin/token',
+            data: {
+              appid: 'wxf0706f4278bb92c8',
+              secret: 'eb42ad3459a11fcf831cfca331a3e3db',
+              grant_type: 'client_credential'
+            },
+            method: 'GET',
+            dataType: 'json',
+            success: function ({data}) {
+              that.globalData.authority = data
+            }
+          })
           that.login(res.code).then(function () {
             wx.setStorageSync('local-sid', Math.random());
           }).catch(function () {
@@ -86,7 +99,7 @@ App({
       setTimeout(function () {
         resolve();
         // reject();
-      }, 5000);
+      }, 50);
       // TODO
       // wx.request({
       //   url: url,
@@ -101,7 +114,28 @@ App({
     });
   },
 
+  getSystemInfo: function () {
+    const that = this;
+    return new Promise(function (resolve, reject) {
+      if (null !== that.globalData.systemInfo) {
+        resolve();
+      } else {
+        wx.getSystemInfo({
+          success: function (res) {
+            that.globalData.systemInfo = res;
+            resolve();
+          },
+          fail: function (res) {
+            reject();
+          }
+        })
+      }
+    })
+  },
+
   globalData: {
-    userInfo: null
+    userInfo: null,
+    authority: null,
+    systemInfo: null
   }
 })

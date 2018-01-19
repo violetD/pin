@@ -1,4 +1,9 @@
 /**index.wxss**/
+canvas {
+  width: 100%;
+  height: 100%;
+}
+
 .wrapper {
   background-color: #dedede;
   font-size: .8rem;
@@ -153,4 +158,66 @@ input {
   width: 50%;
   color: #ec5300;
   text-align: center;
+}
+
+/* 结果弹框 */
+.result-dialog {
+  position: fixed;
+  z-index: 10;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background-color: #d13529;
+}
+
+.result-content {
+  height: 70%;
+  background-color: #d93c2b;
+  border-radius: 0 0 100% 100%/50%;
+  box-shadow: 0 0 2px rgba(51, 7, 4, .1);
+  color: #ffedbb;
+  text-align: center;
+  padding: 100rpx 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-sizing: border-box;
+}
+
+.result-content .userinfo-avatar {
+  position: initial;
+  margin-bottom: 1em;
+}
+
+.result-content .result-text {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.result-content .btn-area {
+  position: absolute;
+  bottom: -1.5em;
+  background-color: #d5b270;
+  border-radius: 100%;
+  width: 3em;
+  height: 3em;
+  left: 50%;
+  margin-left: -1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 36px;
+}
+
+.result-content button {
+  background-color: #d5b270;
+  border-radius: 100%;
+  width: 2.5em;
+  height: 2.5em;
+  box-shadow: 0 0 5px #666;
+  line-height: 2.5em;
+  font-size: 36px;
+  padding: 0;
 }

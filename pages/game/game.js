@@ -27,7 +27,7 @@ Page({
     leftTime: 10
   },
   //事件处理函数
-  onLoad: function () {
+  onLoad: function (id) {
     var that = this
     //调用应用实例的方法获取全局数据
     app.getUserInfo(function (userInfo) {
@@ -36,6 +36,17 @@ Page({
         userInfo: userInfo
       })
     })
+
+    wx.showLoading({
+      title: '获取数据中',
+    })
+    app.request('', {}).then(function () {
+      console.log('set data')
+    }).catch(function () {
+      console.log('error')
+    }).then(function () {
+      wx.hideLoading();
+    });
   },
   interval: null,
   showModal: function () {

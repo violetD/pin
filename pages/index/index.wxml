@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<view class="wrapper">
+<view class="wrapper"> 
   <view class="container">
     <view class="card-view">
       <view class="userinfo">
@@ -67,4 +67,21 @@
       <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
     </view>
   </view>
+
+  <!--结果弹窗-->
+  <view class="result-dialog" wx:if="{{showResult}}">
+    <view class="result-content">
+      <view class="userinfo">
+        <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+        <text>发了一个拼字有奖</text>
+      </view>
+      <view class="result-text">
+        <text>{{text}}</text>
+      </view>
+      <view class="btn-area">
+        <button bindtap="share">開</button>
+      </view>
+    </view>
+  </view>
 </view>
+<canvas canvas-id="canvasid" wx:if="{{showCanvas}}"></canvas>
