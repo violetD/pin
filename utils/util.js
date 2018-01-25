@@ -1,14 +1,14 @@
-function formatTime(date) {
+function formatTime(timestamp) {
+  var date = new Date(timestamp*1000)
   var year = date.getFullYear()
   var month = date.getMonth() + 1
   var day = date.getDate()
 
   var hour = date.getHours()
   var minute = date.getMinutes()
-  var second = date.getSeconds()
-
-
-  return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
+  // var second = date.getSeconds()
+  
+  return [year, '年', month, '月', day, '日'].join('') + ' ' + [hour, minute].map(formatNumber).join(':')
 }
 
 function formatNumber(n) {

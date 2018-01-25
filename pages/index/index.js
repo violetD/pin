@@ -26,20 +26,22 @@ Page({
     showModal: false,
     showResult: false,
     showCanvas: false,
-    imageUrl: null
+    imageUrl: null,
+    orderId: null
   },
   //事件处理函数
   onLoad: function (options) {
 
+    // options.id = 8;
     if (options.id) {
       wx.redirectTo({
         url: '/pages/game/game?id=' + options.id,
       })
     }
+
     // wx.redirectTo({
-    //   url: '/pages/game/game?id=12313',
+    //   url: '/pages/hongbao/hongbao',
     // })
-    // return;
     // wx.switchTab({
     //   url: '/pages/rank/rank',
     // })
@@ -106,7 +108,7 @@ Page({
       this.showError('请输入要拼接的文字内容');
       return;
     }
-    if (!e.detail.value.text.length > 24) {
+    if (e.detail.value.text.length > 24) {
       this.showError('要拼接的文字内容不能超过24个字');
       return;
     }
@@ -118,13 +120,21 @@ Page({
       this.showError('请输入红包个数');
       return;
     }
-
+    
     wx.showLoading({
       title: '提交中',
     })
-    app.request('', e.detail.value).then(function () {
+    let data = e.detail.value;
+    data.money = data.money * 100;
+    data.time = data.time.replace('秒', '');
+    app.request('/game/create', data).then(function (data) {   
       that.setData({
-        showResult: true,
+        orderId: data.orderid
+      })  
+      return that.pay(JSON.parse(data.para));
+    }).then(function () {
+      that.setData({
+        // showResult: true,
         text: e.detail.value.text
       })
       return app.getSystemInfo()
@@ -133,14 +143,30 @@ Page({
     }).then(function () {
       return that.saveCanvasToTempFilePath();
     }).then(function () {
-      that.setData({
-        showCanvas: false
-      })
+      that.share();
+      // that.setData({
+      //   showCanvas: false
+      // })
     }).catch(function () {
       console.log(arguments)
     }).then(function () {
       wx.hideLoading();
     })
+  },
+  pay: function (data) {
+    return new Promise(function (resolve, reject) {
+      // TODO
+      resolve();
+      // wx.requestPayment({
+      //   ...data,
+      //   success: function () {
+      //     console.log(arguments)
+      //   },
+      //   fail: function () {
+      //     reject();
+      //   }
+      // })
+    }) 
   },
   hideResult: function () {
     this.setData({

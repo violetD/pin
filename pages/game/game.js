@@ -2,51 +2,80 @@
 //获取应用实例
 var app = getApp()
 var util = require('../../utils/util.js')
+if (!Array.prototype.shuffle) {
+  Array.prototype.shuffle = function () {
+    for (var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
+    return this;
+  };
+}
 Page({
   data: {
+    options: null,
     userInfo: {},
-    enabled: true,
+    status: 0,
     showModal: false,
-    words: [{
-      text: '吧',
-      checked: false
-    }, {
-      text: '厉',
-      checked: true
-    }, {
-      text: '我',
-      checked: true
-    }, {
-      text: '害',
-      checked: false
-    }, {
-      text: '们',
-      checked: false
-    }],
-    resultWords: '厉我',
-    leftTime: 10
+    gameInfo: {
+      money: '0.00',
+      number: 1,
+      send_num: 0,
+      text: 'XXX'
+    },
+    words: [],
+    resultWords: '',
+    leftTime: 0
   },
   //事件处理函数
-  onLoad: function (id) {
+  onLoad: function (options) {
+    this.setData({
+      options
+    })
+
     var that = this
     //调用应用实例的方法获取全局数据
+    wx.showLoading({
+      title: '获取数据中',
+    }) 
     app.getUserInfo(function (userInfo) {
       //更新数据
       that.setData({
         userInfo: userInfo
       })
+      that.initGameInfo();
     })
-
-    wx.showLoading({
-      title: '获取数据中',
-    })
-    app.request('', {}).then(function () {
-      console.log('set data')
+  },
+  initGameInfo: function () {
+    const that = this;
+    app.request('/game/fetch', { id: this.data.options.id }).then(function (data) {
+      that.setData({
+        gameInfo: data.game
+      })
+      that.initGame();
     }).catch(function () {
-      console.log('error')
+      that.setData({
+        status: 2
+      });
     }).then(function () {
       wx.hideLoading();
     });
+  },
+  initGame: function () {
+    const game = this.data.gameInfo;
+    const status = game.status == 1 ? 1 : game.status == 2 ? 3 : -1;
+    let words = [];
+    for (let i = 0; i < game.text.length; i++) {
+      words.push({
+        text: game.text[i],
+        checked: false
+      })
+    }
+    words.shuffle();
+    game.money = (game.money / 100).toFixed(2);
+    this.setData({
+      status,
+      leftTime: game.time,
+      resultWords: '',
+      words
+    })
   },
   interval: null,
   showModal: function () {
@@ -61,7 +90,10 @@ Page({
       })
       if (that.data.leftTime <= 0) {
         clearInterval(that.interval);
-        console.log('out time')
+        wx.showToast({
+          title: '超时啦',
+        })
+        that.hideModal();
       }
     }, 1000);
   },
@@ -71,7 +103,9 @@ Page({
     })
   },
   bindTap: function (e) {
+    if (this.data.showModal === false) return;
     if (this.data.words[e.target.dataset.index].checked) return;
+
     var param = {
       resultWords: this.data.resultWords + this.data.words[e.target.dataset.index].text
     }
@@ -79,7 +113,10 @@ Page({
     param[key] = true
     this.setData(param)
     if (this.data.words.length <= this.data.resultWords.length) {
+      clearInterval(this.interval);
+      this.interval = null;
       this.submit();
+      this.hideModal();
     }
   },
   submit: function () {
@@ -87,11 +124,22 @@ Page({
       title: '提交中',
     })
 
-    app.request('', {}).then(function () {
-      console.log('done')
+    const that = this;
+
+    app.request('/game/rush', {
+      id: this.options.id,
+      time: this.data.gameInfo.time - this.data.leftTime,
+      text: this.data.resultWords
+    }).then(function (data) {
+      wx.showModal({
+        title: '中奖啦',
+        content: '恭喜获得' + (data.money / 100) + '元红包',
+      })
     }).catch(function () {
-      console.log('error')
+      // TODO
+      // that.initGame();
     }).then(function () {
+      that.initGameInfo();
       wx.hideLoading();
     });
   }

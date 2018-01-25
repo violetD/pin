@@ -1,69 +1,82 @@
 //app.js
 App({
   onLaunch: function () {
+    //this.globalData.passportInfo = wx.getStorageSync('local-sid');
+  },
+
+  login: function () {
     const that = this;
 
     wx.showLoading({
       title: '登录中',
     })
 
-    wx.login({
-      success: function (res) {
-        if (res.code) {
-          // 发起网络请求
-          wx.request({
-            url: 'https://api.weixin.qq.com/cgi-bin/token',
-            data: {
-              appid: 'wxf0706f4278bb92c8',
-              secret: 'eb42ad3459a11fcf831cfca331a3e3db',
-              grant_type: 'client_credential'
-            },
-            method: 'GET',
-            dataType: 'json',
-            success: function ({data}) {
-              that.globalData.authority = data
-            }
-          })
-          that.login(res.code).then(function () {
-            wx.setStorageSync('local-sid', Math.random());
-          }).catch(function () {
-            wx.clearStorageSync('local-sid');
+    return new Promise(function (resolve, reject) {
+      // 避免多次请求
+      if (that.globalData.tryLogin) reject();
+      that.globalData.tryLogin = true;
+      wx.login({
+        success: function (res) {
+          if (res.code) {
+            // 发起网络请求
+            wx.request({
+              url: 'https://api.weixin.qq.com/cgi-bin/token',
+              data: {
+                appid: 'wxf0706f4278bb92c8',
+                secret: 'eb42ad3459a11fcf831cfca331a3e3db',
+                grant_type: 'client_credential'
+              },
+              method: 'GET',
+              dataType: 'json',
+              success: function ({ data }) {
+                that.globalData.authority = data
+              }
+            })
+            that.thirdLogin(res.code).then(function (data) {
+              wx.setStorageSync('local-sid', data);
+              resolve();
+            }).catch(function () {
+              wx.clearStorageSync('local-sid');
+              wx.showModal({
+                title: '警告',
+                content: '登录失败，请查看网络状况，重新登录。',
+              })
+              reject();
+            }).then(function () {
+              wx.hideLoading();
+            });
+
+          } else {
             wx.showModal({
               title: '警告',
-              content: '登录失败，请查看网络状况，重新登录。',
+              content: '您点击了拒绝授权，无法使用此功能。',
             })
-          }).then(function () {
             wx.hideLoading();
-          });
-          
-        } else {
-          wx.showModal({
-            title: '警告',
-            content: '您点击了拒绝授权，无法使用此功能。',
-          })
-          // console.log('获取用户登录态失败！' + res.errMsg)
+            reject();
+          }
         }
-      }
-    });
-
+      });
+    })
   },
-
-  login: function (code) {
-    return new Promise(function (resolve, reject) {
-      setTimeout(function() {
-        resolve();
-        // reject();
-      }, 200);
-    });
-    // TODO
+  thirdLogin: function (code) {
+    const that = this;
     return new Promise(function (resolve, reject) {
       wx.request({
-        url: 'https://test.com/onLogin',
+        url: that.globalData.requestUrl + '/login',
         data: {
-          code: res.code
+          code
         },
-        success: function () {
-          resolve();
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        method: 'POST',
+        success: function ({ statusCode, data }) {
+          if (statusCode === 200 && data.errno === 0) {
+            that.globalData.passportInfo = data;
+            resolve(data);
+          } else {
+            reject();
+          }
         },
         fail: function () {
           reject();
@@ -74,7 +87,7 @@ App({
 
   getUserInfo: function (cb) {
     var that = this
-    if (this.globalData.userInfo) {
+    if (this.globalData.userInfo && this.globalData.passportInfo) {
       typeof cb == "function" && cb(this.globalData.userInfo)
     } else {
       //调用登录接口
@@ -94,23 +107,43 @@ App({
     }
   },
 
-  request: function (url, data) {
+  request: function (path, params, method) {
+    const that = this;
     return new Promise(function (resolve, reject) {
-      setTimeout(function () {
-        resolve();
-        // reject();
-      }, 50);
-      // TODO
-      // wx.request({
-      //   url: url,
-      //   data: data,
-      //   success: function () {
-      //     resolve();
-      //   },
-      //   fail: function () {
-      //     reject();
-      //   }
-      // })
+      wx.request({
+        url: that.globalData.requestUrl + path + '?token=' + (that.globalData.passportInfo ? that.globalData.passportInfo.token : ''),
+        data: params,
+        method: method || 'GET',
+        success: function ({ statusCode, data }) {
+          if (statusCode === 200) {
+            if (data.errno === 0) {
+              resolve(data);
+            } else if (data.errno === -1) {
+              // 重新登录
+              that.login().then(function () {
+                that.request(path, params, method).then(function (data) {
+                  resolve(data);
+                }).catch(function () {
+                  reject();
+                });
+              }).catch(function () {
+                reject();
+              });
+            } else {
+              wx.showModal({
+                title: '错误提示',
+                content: data.errmsg,
+              });
+              reject();
+            }
+          } else {
+            reject();
+          }      
+        },
+        fail: function () {
+          reject();
+        }
+      })
     });
   },
 
@@ -135,7 +168,10 @@ App({
 
   globalData: {
     userInfo: null,
+    passportInfo: null,
     authority: null,
-    systemInfo: null
+    systemInfo: null,
+    tryLogin: false,
+    requestUrl: 'http://47.92.33.106'
   }
 })

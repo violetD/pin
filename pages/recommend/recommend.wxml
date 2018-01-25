@@ -1,0 +1,18 @@
+<!--pages/recommend/recommend.wxml-->
+<view class="wrapper recommend-list">
+  <block wx:for="{{recommends}}" wx:for-item="rank" wx:key="*this">
+    <view class="rank-item rank-{{index}}">
+      <text class="rank-number">NO.{{index + 1}}</text>
+      <view class="userinfo">
+        <image class="userinfo-avatar" src="{{rank.avatarUrl}}" background-size="cover"></image>
+        <view class="rank-info">          
+          <span wx:if="{{index == 0}}" class="ribbon">
+            <text class="userinfo-nickname">{{rank.nickName}}</text>
+          </span>
+          <text wx:else class="userinfo-nickname">{{rank.nickName}}</text>       
+          <text>￥{{rank.money}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

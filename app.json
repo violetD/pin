@@ -4,7 +4,7 @@
     "pages/me/me",
     "pages/hongbao/hongbao",
     "pages/leftmoney/leftmoney",
-    "pages/rank/rank",
+    "pages/recommend/recommend",
     "pages/game/game"
   ],
   "window":{
@@ -25,10 +25,10 @@
       "selectedIconPath": "assets/images/add_s.png",
       "text": "发一个"
     }, {
-      "pagePath": "pages/rank/rank",
+      "pagePath": "pages/recommend/recommend",
       "iconPath": "assets/images/rank.png",
       "selectedIconPath": "assets/images/rank_s.png",
-      "text": "排行榜"
+      "text": "更多推荐"
     }, {
       "pagePath": "pages/me/me",
       "iconPath": "assets/images/me.png",

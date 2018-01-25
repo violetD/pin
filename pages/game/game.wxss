@@ -66,24 +66,79 @@ button[type=default] {
 }
 
 .countdown {
-  border: 2px solid #B31800;
   border-radius: 50%;
-  width: 2em;
-  height: 2em;
-  text-align: center;
-  line-height: 2em;
+  width: 120rpx;
+  height: 120rpx;
+  position: relative;
   margin: 0 auto;
+  background-color: #ccc;
+  overflow: hidden;
+}
+
+.countdown .left {
+  transform: rotate(-90deg); 
+  height: 50%;
+  background-color: #B31800;
+  transform-origin: center bottom;
+  animation: countdownleft linear;
+  animation-fill-mode: forwards;  
+}
+
+.countdown .right { 
+  height: 50%;
+  background-color: #ccc;
+  transform-origin: center top;
+  animation: countdownright linear;
+  transform: rotate(-90deg);
+}
+
+@keyframes countdownleft {
+  0% {
+    transform: rotate(-90deg);
+    background-color: #B31800;
+  }
+  100% {
+    transform: rotate(90deg);
+    background-color: #B31800;
+  }
+}
+
+@keyframes countdownright {
+  0% {
+    transform: rotate(-90deg);
+    background-color: #B31800;
+  }
+  100% {
+    transform: rotate(90deg);
+    background-color: #B31800;
+  }
+}
+
+.countdown .text {
+  position: absolute;
+  border-radius: 50%;
+  width: 80rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  left: 50%;
+  top: 50%;
+  margin-left: -40rpx;
+  margin-top: -40rpx;
+  background-color: #fff;
 }
 
 .result {
   text-align: center;
   color: #B31800;
   margin-top: .5em;
+  height: 1em;
 }
 
 .words-area {
   display: flex;
   margin-top: .5em;
+  justify-content: space-around;  
 }
 
 .words-area .word {

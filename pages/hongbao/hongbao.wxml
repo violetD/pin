@@ -5,14 +5,77 @@
     <view class="swiper-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" bindtap="swichNav">我收到的</view>
   </view>
     
-  <swiper current="{{currentTab}}" class="swiper-box" duration="300" bindchange="bindChange">
+  <swiper current="{{currentTab}}" class="swiper-box" duration="300" bindchange="bindChange" style="height:{{clientHeight-swiperTabHeight}}px">
     <!-- 发出的红包 -->
     <swiper-item>
-      <view>我是哈哈</view>
+      <view class="total-info" id="meInfoView">
+        <view class="userinfo">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+          <view><text class="userinfo-name">{{userInfo.nickName}}</text> 共发出</view>
+        </view>
+        <view class="sendinfo">
+          <view class="sendinfo-item">
+            <text class="sendinfo-title">金额(元)</text>
+            <text>{{totalMoney}}</text>
+          </view>
+          <view class="sendinfo-item">
+            <text class="sendinfo-title">数量(个)</text>
+            <text>{{totalNumber}}</text>
+          </view>
+        </view>
+      </view>
+      <scroll-view scroll-y="{{true}}" bindscrolltolower="bindMeScroll" style="height:{{clientHeight-swiperTabHeight-meScrollViewHeight}}px">
+        <view class="list">
+          <block wx:for="{{me}}" wx:key="{{index}}">
+            <view class="item">
+              <view class="info">         
+                <view>{{item.text}}</view>
+                <view>{{item.money/100}} 元</view>
+              </view>
+              <view class="info affiliate">
+                <view>{{item.formatCreateTime}}</view>
+                <view>{{item.send_num}}/{{item.number}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        <view class="loading" style="display:{{meLoadingShow ? 'block' : 'none'}}">{{meLoadingText}}</view>
+      </scroll-view>
     </swiper-item>
     <!-- 收到的红包 -->
     <swiper-item>
-      <view>我是呵呵</view>
+      <view class="total-info" id="meInfoView">
+        <view class="userinfo">
+          <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+          <view><text class="userinfo-name">{{userInfo.nickName}}</text> 共收到</view>
+        </view>
+        <view class="sendinfo">
+          <view class="sendinfo-item">
+            <text class="sendinfo-title">金额(元)</text>
+            <text>{{totalRecieveMoney}}</text>
+          </view>
+          <view class="sendinfo-item">
+            <text class="sendinfo-title">数量(个)</text>
+            <text>{{totalRecieveNumber}}</text>
+          </view>
+        </view>
+      </view>
+      <scroll-view scroll-y="{{true}}" bindscrolltolower="bindRecieveScroll" style="height:{{clientHeight-swiperTabHeight-meScrollViewHeight}}px">
+        <view class="list">
+          <block wx:for="{{recieve}}" wx:key="{{index}}">
+            <view class="item">
+              <view class="info">         
+                <view>{{item.text}}</view>
+                <view>{{item.money/100}} 元</view>
+              </view>
+              <view class="info affiliate">
+                <view>{{item.formatCreateTime}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        <view class="loading" style="display:{{recieveLoadingShow ? 'block' : 'none'}}">{{recieveLoadingText}}</view>
+      </scroll-view>
     </swiper-item>
   </swiper>
 </view>

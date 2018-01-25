@@ -20,3 +20,26 @@ button[type="primary"] {
 .button-hover[type="primary"] {
   background-color: #560d02
 }
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.list .item {
+  margin-bottom: 20rpx;
+  background-color: #fff;
+  padding: 15rpx 15rpx;
+}
+
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+}
