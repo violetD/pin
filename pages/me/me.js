@@ -4,7 +4,8 @@ var app = getApp()
 var util = require('../../utils/util.js')
 Page({
   data: {
-    userInfo: {}
+    userInfo: {},
+    money: '0.00'
   },
   //事件处理函数
   onLoad: function () {
@@ -15,6 +16,20 @@ Page({
       that.setData({
         userInfo: userInfo
       })
+    })
+
+    wx.showLoading({
+      title: '加载中',
+    })
+
+    app.getMoney().then(function (data) {
+      that.setData({
+        money: data
+      })
+    }).catch(function () {
+
+    }).then(function () {
+      wx.hideLoading()
     })
   }
 })

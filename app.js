@@ -165,13 +165,29 @@ App({
       }
     })
   },
+  getMoney: function () {
+    const that = this;
+    return new Promise(function (resolve, reject) {
+      if (null !== that.globalData.leftMoney) {
+        resolve(that.globalData.leftMoney)
+      } else {
+        that.request('/pay/get_info').then(function (data) {
+          that.globalData.leftMoney = (data.money / 100).toFixed(2);
+          resolve(that.globalData.leftMoney)
 
+        }).catch(function () {
+          reject();
+        })
+      }     
+    })
+  },
   globalData: {
     userInfo: null,
     passportInfo: null,
     authority: null,
     systemInfo: null,
     tryLogin: false,
+    leftMoney: null,
     requestUrl: 'http://47.92.33.106'
   }
 })

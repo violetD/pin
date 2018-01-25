@@ -59,3 +59,16 @@
 .btn-area .navigator-icon-text {
   font-size: 35px;
 }
+
+.contact-con {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 0;
+  line-height: normal;
+  font-size: inherit;
+}
+
+.contact-con::after {
+  border: none;
+}

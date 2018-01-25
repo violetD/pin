@@ -2,7 +2,7 @@
 //获取应用实例
 const app = getApp()
 const util = require('../../utils/util.js')
-import { $wuxActionSheet } from '../../components/wux'
+// import { $wuxActionSheet } from '../../components/wux'
 
 Page({
   data: {
@@ -34,9 +34,7 @@ Page({
 
     // options.id = 8;
     if (options.id) {
-      wx.redirectTo({
-        url: '/pages/game/game?id=' + options.id,
-      })
+      this.play(options.id)
     }
 
     // wx.redirectTo({
@@ -54,6 +52,11 @@ Page({
       that.setData({
         userInfo: userInfo
       })
+    })
+  },
+  play: function (id) {
+    wx.navigateTo({
+      url: '/pages/game/game?id=' + id,
     })
   },
   setTextValue: function (e) {
@@ -173,19 +176,37 @@ Page({
       showResult: false
     })
   },
-  share: function () {
-    // wx.request({
-    //   url: 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + app.globalData.authority.access_token,
-    //   data: {
-    //     scene: 'id=12',
-    //     path: 'pages/index/index',
-    //     width: 430
-    //   },
-    //   method: 'POST',
-    //   success: function ({data}) {
-    //     console.log(arguments)
-    //   }
-    // })
+  generateQr: function () {
+    return new Promise(function (resolve, reject) {
+      wx.request({
+        url: 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + app.globalData.authority.access_token,
+        data: {
+          scene: 'id=12',
+          path: 'pages/index/index',
+          width: 430
+        },
+        method: 'POST',
+        success: function ({ data }) {
+          console.log(data)
+          wx.canvasPutImageData({
+            canvasId: 'canvasid',
+            data: data,
+            success: function () {
+              resolve();
+            },
+            fail: function () {
+              reject();
+            }
+          })
+        },
+        fail: function () {
+          reject();
+        }
+      })
+    })
+    
+  },
+  share: function () {   
 
     const that = this;
     wx.showActionSheet({
@@ -204,12 +225,20 @@ Page({
           break;
           case 1:
             that.saveImageToPhotosAlbum().then(function () {
-
-            }).catch(function () {});
+              console.log("success")
+            }).catch(function () {
+              console.log("fail")
+            });
           break;
           case 2:
+            that.play(that.data.orderId);
           break;
         }
+      },
+      complete: function () {
+        that.setData({
+          showCanvas: false
+        })
       }
     })
   },
@@ -230,14 +259,15 @@ Page({
       wx.getImageInfo({
         src: that.data.userInfo.avatarUrl,
         success: function ({ path, height, width }) {
-          context.save();
-          context.beginPath()
-          context.arc(windowWidth / 2, windowHeight * 0.2, r, 0, 2 * Math.PI)
-          context.clip()
-          context.drawImage(path, windowWidth / 2 - r, windowHeight * 0.2 - r, r * 2, r * 2);
-          context.restore();
-
           resolve();
+          // context.save();
+          // context.beginPath()
+          // context.arc(windowWidth / 2, windowHeight * 0.2, r, 0, 2 * Math.PI)
+          // context.clip()
+          // context.drawImage(path, windowWidth / 2 - r, windowHeight * 0.2 - r, r * 2, r * 2);
+          // context.restore();
+
+          // resolve();
         }
       });
     })
@@ -260,6 +290,8 @@ Page({
       context.fillText("发了一个拼字有奖", windowWidth / 2 - 80, windowHeight * 0.35);
 
       context.draw();
+    }).then(function () {
+      // return that.generateQr();
     });
   },
   saveCanvasToTempFilePath: function () {
@@ -284,10 +316,9 @@ Page({
     });
   },
   onShareAppMessage: function () {
-    console.log("share")
     return {
-      title: '自定义转发标题',
-      path: '/pages/index/index?id=123',
+      title: '小程序',
+      path: '/pages/index/index' + (this.data.orderid ? '?id=' + this.data.orderid : ''),
       imageUrl: this.data.imageUrl,
       success: function (res) {
         // 转发成功
