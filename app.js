@@ -2,6 +2,9 @@
 App({
   onLaunch: function () {
     this.globalData.passportInfo = wx.getStorageSync('local-sid');
+    if (!this.globalData.passportInfo) {
+      this.login();
+    }
   },
 
   login: function () {
@@ -132,7 +135,7 @@ App({
             } else {
               wx.showModal({
                 title: '错误提示',
-                content: data.errmsg,
+                content: '网络错误',
               });
               reject();
             }

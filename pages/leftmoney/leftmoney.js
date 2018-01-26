@@ -7,7 +7,7 @@ Page({
     userInfo: {},
     leftmoney: '0.00',
     withdrawals: '',
-    inWithdrawals: '¥0.00'
+    inWithdrawals: '0.00'
   },
   //事件处理函数
   onLoad: function () {
@@ -52,6 +52,28 @@ Page({
   bindWithdrawTap: function () {
     const that = this;
     const withdrawals = this.data.withdrawals;
+
+    if (!withdrawals) {
+      wx.showModal({
+        title: '提示',
+        content: '提现金额不能为空',
+      })
+      return;
+    }
+    if (withdrawals > this.data.leftmoney) {
+      wx.showModal({
+        title: '提示',
+        content: '提现金额不能超过余额',
+      })
+      return;
+    }
+    if (withdrawals.toFixed(2) === 0.00) {
+      wx.showModal({
+        title: '提示',
+        content: '提现金额不能为0',
+      })
+      return;
+    }
     wx.showLoading({
       title: '提交中',
     })
@@ -60,7 +82,7 @@ Page({
       money: this.data.withdrawals * 100
     }).then(function () {
       wx.showToast({
-        title: '提现成功',
+        title: '提交提现成功',
       })
       that.setData({
         withdrawals: '',

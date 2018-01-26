@@ -93,7 +93,6 @@ Page({
     this.setData({ contentHeight });
     this.drawSquare(ctx, offsetHeight + this.data.lineHeight * charList.length + avatarR + qrR * 2);
 
-
     this.drawCircleImg(ctx, this.data.userInfo.avatarUrl, hLeft, 10, avatarR);
     this.drawFont(ctx, this.data.title, offsetHeight);
 

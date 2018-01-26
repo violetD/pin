@@ -27,8 +27,12 @@ Page({
   },
   //事件处理函数
   onLoad: function (options) {
+    // wx.navigateTo({
+    //   url: '/pages/picture/picture?id=36',
+    // })
 
-    // this.play(36, 1)
+    // options.id = 4;
+    //this.play(36, 1)
     if (options.id) {
       this.play(options.id)
     }
@@ -54,7 +58,7 @@ Page({
   },
   setMoney: function (e) {
     this.setData({
-      tips: e.detail.value * 0.03
+      tips: e.detail.value * 0.02
     })
   },
   showSetTime: function () {
@@ -107,8 +111,20 @@ Page({
       this.showError('请输入总赏金');
       return;
     }
+    if (e.detail.value.money < 1) {
+      this.showError('总赏金不能少于1元');
+      return;
+    }
     if ('' === e.detail.value.number) {
       this.showError('请输入红包个数');
+      return;
+    }
+    if (e.detail.value.number / e.detail.value.money < 0.01) {
+      this.showError('人均赏金不能小于0.01元');
+      return;
+    }
+    if (e.detail.value.time > 60) {
+      this.showError('挑战时间不能超过60秒');
       return;
     }
     
@@ -122,8 +138,10 @@ Page({
       that.setData({
         orderId: data.orderid,
         text: e.detail.value.text
-      })  
-      return that.pay(JSON.parse(data.para));
+      })
+      if (!data.has_payed) {
+        return that.pay(JSON.parse(data.para));
+      }
     }).then(function () {
       that.play(that.data.orderId, 1)
     }).catch(function () {
@@ -140,6 +158,7 @@ Page({
       //   ...data,
       //   success: function () {
       //     console.log(arguments)
+      //     resolve();
       //   },
       //   fail: function () {
       //     reject();

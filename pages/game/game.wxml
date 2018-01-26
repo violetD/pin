@@ -30,7 +30,7 @@
       </view>
     </view>
   </view>
-  <view class="info-area">共￥{{gameInfo.money}}元，领取{{gameInfo.send_num}}/{{gameInfo.number}}个</view>
+  <view class="info-area">共￥{{gameInfo.money/100}}元，领取{{gameInfo.send_num}}/{{gameInfo.number}}个</view>
   <view class="desc-area">
     <text>未领取的金额，将在48小时内退至余额</text>
   </view>

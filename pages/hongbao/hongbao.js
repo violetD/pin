@@ -89,6 +89,7 @@ Page({
         title: '加载中',
       })
       app.request("/game/getRecieveSummary").then(function (data) {
+        console.log(data)
         that.setData({
           totalRecieveMoney: (data.data.money / 100).toFixed(2),
           totalRecieveNumber: data.data.num,

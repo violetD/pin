@@ -11,7 +11,7 @@
     </view>
     <view>
       <text>提现中金额</text>
-      <text>{{inWithdrawals}}</text>
+      <text>¥{{inWithdrawals}}</text>
     </view>
   </view>
   <view class="btn-area">
