@@ -29,9 +29,6 @@ Page({
   onLoad: function (options) {
 
     // this.play(36, 1)
-    wx.navigateTo({
-      url: '/pages/picture/picture?id=36'
-    })
     if (options.id) {
       this.play(options.id)
     }

@@ -28,8 +28,8 @@
       "text": "发一个"
     }, {
       "pagePath": "pages/recommend/recommend",
-      "iconPath": "assets/images/rank.png",
-      "selectedIconPath": "assets/images/rank_s.png",
+      "iconPath": "assets/images/recommend.png",
+      "selectedIconPath": "assets/images/recommend_s.png",
       "text": "更多推荐"
     }, {
       "pagePath": "pages/me/me",
