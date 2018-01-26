@@ -1,6 +1,9 @@
 <!--index.wxml-->
 <view class="wrapper">
   <view class="card-view">
+    <navigator class="questions" url="/pages/questions/questions" hover-class="navigator-hover">
+      <text>常见问题</text>
+    </navigator>
     <view class="userinfo">
       <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
       <text>{{userInfo.nickName}}</text>

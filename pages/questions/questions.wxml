@@ -1,0 +1,14 @@
+<!--pages/questions/questions.wxml-->
+<view class="wrapper">
+  <view class="list">
+    <block wx:for="{{questions}}" wx:key="{{index}}">
+      <view class="item">
+        <view class="question-title">
+          <text>{{item.title}}</text>
+          <text class="iconfont icon-view-list" bindtap="bindTap" data-index="{{index}}"></text>
+        </view>
+        <view class="question" hidden="{{item.hidden}}">{{item.description}}</view>
+      </view>
+    </block>
+  </view>
+</view>

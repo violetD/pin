@@ -1,0 +1,23 @@
+/* pages/questions/questions.wxss */
+@import "../../assets/font/iconfont.wxss";
+
+.list {
+  padding: 30rpx;
+}
+
+.question-title {
+  position: relative;
+  padding-right: 1.5em;
+}
+
+.icon-view-list {
+  font-size: 1.2em;
+  position: absolute;
+  right: 0;
+}
+
+.question {
+  margin-top: 15rpx;
+  border-top: 1rpx dashed #efefef;
+  padding-top: 15rpx;
+}

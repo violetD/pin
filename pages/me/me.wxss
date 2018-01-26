@@ -59,3 +59,14 @@
 .btn-area .navigator-icon-text {
   font-size: 35px;
 }
+
+.questions {
+  position: absolute;
+  text-align: center;
+  border-radius: 20rpx;
+  border: 1rpx solid #bbb;
+  color: #bbb;
+  padding: 3rpx 15rpx;
+  right: 50rpx;
+  top: 0rpx;
+}

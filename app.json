@@ -5,7 +5,8 @@
     "pages/hongbao/hongbao",
     "pages/leftmoney/leftmoney",
     "pages/recommend/recommend",
-    "pages/game/game"
+    "pages/game/game",
+    "pages/questions/questions"
   ],
   "window":{
     "backgroundTextStyle": "light",
