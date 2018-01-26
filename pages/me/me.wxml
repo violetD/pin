@@ -15,14 +15,16 @@
       </navigator>
       <i class="navigator-divide"></i>
       <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
-        <i class="iconfont navigator-icon-text">¥0.00</i>
+        <i class="iconfont navigator-icon-text">¥{{money}}</i>
         <text class="navigator-text">我的余额</text>
       </navigator>
       <i class="navigator-divide"></i>
-      <navigator class="navigator" url="/page/index/index" open-type="switchTab" hover-class="other-navigator-hover">
-        <i class="iconfont icon-liuyan navigator-icon"></i>      
-        <text class="navigator-text">联系客服</text>
-      </navigator>
+      <view class="navigator" hover-class="other-navigator-hover">
+        <button open-type="contact" class="contact-con">
+          <i class="iconfont icon-liuyan navigator-icon"></i>
+          <text class="navigator-text">联系客服</text>
+        </button>
+      </view>
     </view>
   </view>
 </view>

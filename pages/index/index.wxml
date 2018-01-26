@@ -23,13 +23,13 @@
         <view class="section section-gap">
           <label>
             <text class="label-text">总赏金</text>
-            <input type="digit" name="money" bindinput="setMoney" placeholder="填写金额"/>元
+            <input type="digit" name="money" value="100" bindinput="setMoney" placeholder="填写金额"/>元
           </label>    
         </view>
         <view class="section section-gap">
           <label>
             <text class="label-text">数量</text>
-            <input type="number" name="number" placeholder="填写数量"/>个
+            <input type="number" name="number" value="10" placeholder="填写数量"/>个
           </label>    
         </view>
         <view class="section section-gap">

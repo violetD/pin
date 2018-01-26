@@ -70,3 +70,16 @@
   right: 50rpx;
   top: 0rpx;
 }
+
+.contact-con {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  padding: 0;
+  line-height: normal;
+  font-size: inherit;
+}
+
+.contact-con::after {
+  border: none;
+}

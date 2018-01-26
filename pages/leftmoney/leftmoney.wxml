@@ -6,7 +6,7 @@
   <view class="leftmoney-detail">
     <view>
       <text>¥</text>
-      <input type="digit" value="{{withdrawals}}" />
+      <input type="digit" bindinput="bindSetValue" value="{{withdrawals}}" />
       <text class="btn-link" bindtap="bindTap">全部提现</text>
     </view>
     <view>
@@ -15,7 +15,7 @@
     </view>
   </view>
   <view class="btn-area">
-    <button type="primary">提现</button>
+    <button type="primary" bindtap="bindWithdrawTap">提现</button>
     <text class="desc">提现金额将在1-5个工作日打到您微信零钱当中</text>
     <text class="desc">平台不收取任何手续费</text>
   </view>
