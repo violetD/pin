@@ -1,4 +1,8 @@
 /**app.wxss**/
+page {
+  background-color: #dedede;
+}
+
 .container {
   height: 100vh;
   display: flex;
@@ -9,16 +13,37 @@
 }
 
 .wrapper {
-  background-color: #dedede;
   height: 100vh;
 }
 
-button[type="primary"] {
-  background-color: #B31800
+button[type="app-primary"] {
+  background-color: #B31800;
+  color: #fff;
 }
 
-.button-hover[type="primary"] {
-  background-color: #560d02
+.button-hover[type="app-primary"] {
+  background-color: #560d02;
+  color: #fff;
+}
+
+button[type="app-default"] {
+  color: #B31800;
+  background-color: #e7c41f;
+}
+
+.button-hover[type="app-default"] {
+  color: #B31800;
+  background-color: #c7aa1e;
+}
+
+button[type="app-warn"] {
+  color: #B31800;
+  background-color: #d93c2b;
+}
+
+.button-hover[type="app-warn"] {
+  color: #B31800;
+  background-color: #d93c2b;
 }
 
 .list {
@@ -42,4 +67,8 @@ button[type="primary"] {
   width: 128rpx;
   height: 128rpx;
   border-radius: 50%;
+}
+
+.link-btn {
+  color: #007fff;
 }

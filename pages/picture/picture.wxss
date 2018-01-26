@@ -1,0 +1,13 @@
+/* pages/picture/picture.wxss */
+.box {
+  padding: 30rpx;
+}
+
+.btn-area {
+  padding-top: 45rpx;
+  text-align: center;
+}
+
+.btn-area button {
+  margin-bottom: 30rpx;
+}

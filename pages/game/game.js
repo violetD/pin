@@ -22,7 +22,8 @@ Page({
     },
     words: [],
     resultWords: '',
-    leftTime: 0
+    leftTime: 0,
+    showShare: false
   },
   //事件处理函数
   onLoad: function (options) {
@@ -40,8 +41,9 @@ Page({
       that.setData({
         userInfo: userInfo
       })
-      that.initGameInfo();
     })
+
+    this.initGameInfo();
   },
   initGameInfo: function () {
     const that = this;
@@ -49,7 +51,11 @@ Page({
       that.setData({
         gameInfo: data.game
       })
-      that.initGame();
+      if (that.options.share == 1) {
+        that.showShare();
+      } else {
+        that.initGame();
+      }
     }).catch(function () {
       that.setData({
         status: 2
@@ -141,6 +147,40 @@ Page({
     }).then(function () {
       that.initGameInfo();
       wx.hideLoading();
+    });
+  },
+  showShare: function () {
+    this.setData({
+      showShare: true
+    })
+  },
+  onShareAppMessage: function () {
+    return {
+      title: this.gameInfo.text,
+      path: '/pages/index/index' + (this.options.id ? '?id=' + this.options.id : ''),
+      success: function (res) {
+        // 转发成功
+      },
+      fail: function (res) {
+        // 转发失败
+      }
+    }
+  },
+  share: function () {
+    wx.showShareMenu({
+      
+    })
+  },
+  play: function () {
+    this.initGame();
+    this.setData({
+      showShare: false
+    })
+  },
+  picture: function () {
+    wx.setStorageSync('game_info', this.data.gameInfo);
+    wx.navigateTo({
+      url: '/pages/picture/picture?id=' + this.options.id
     });
   }
 })

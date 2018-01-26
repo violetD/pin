@@ -6,7 +6,8 @@
     "pages/leftmoney/leftmoney",
     "pages/recommend/recommend",
     "pages/game/game",
-    "pages/questions/questions"
+    "pages/questions/questions",
+    "pages/picture/picture"
   ],
   "window":{
     "backgroundTextStyle": "light",

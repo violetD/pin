@@ -9,11 +9,11 @@
       <text>{{gameInfo.text}}</text>
     </view>
     <view class="op-area">
-      <button wx:if="{{status===0}}" type="primary">加载中。。。</button>
-      <button wx:elif="{{status===1}}" type="primary" bindtap="showModal">点击拼出上面的文字领红包</button>
-      <button wx:elif="{{status===2}}" type="default">加载失败</button>
-      <button wx:elif="{{status===3}}" type="default">红包已领完</button>
-      <button wx:else type="default">红包已失效</button>
+      <button wx:if="{{status===0}}" type="app-default">加载中。。。</button>
+      <button wx:elif="{{status===1}}" type="app-default" bindtap="showModal">点击拼出上面的文字领红包</button>
+      <button wx:elif="{{status===2}}" type="app-warn">加载失败</button>
+      <button wx:elif="{{status===3}}" type="app-warn">红包已领完</button>
+      <button wx:else type="app-warn">红包已失效</button>
     </view>
     <view class="btn-area">
       <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
@@ -24,10 +24,10 @@
         <i class="iconfont icon-add-r navigator-icon"></i>
         <text class="navigator-text">我要发一个</text>
       </navigator>
-      <navigator class="navigator" url="/page/index/index" open-type="switchTab" hover-class="other-navigator-hover">
+      <view class="navigator" bindtap="showShare">
         <i class="iconfont icon-share navigator-icon"></i>      
         <text class="navigator-text">去转发</text>
-      </navigator>
+      </view>
     </view>
   </view>
   <view class="info-area">共￥{{gameInfo.money}}元，领取{{gameInfo.send_num}}/{{gameInfo.number}}个</view>
@@ -44,6 +44,32 @@
       <view class="words-area">
         <text class="word {{word.checked ? 'checked' : ''}}" wx:for="{{words}}" wx:for-item="word" wx:key="text" bindtap="bindTap" data-index="{{index}}">{{word.text}}</text>
       </view>
+    </view>
+  </view>
+</view>
+
+<!--分享弹窗-->
+<view class="mask" wx:if="{{showShare}}">
+  <view class="result-dialog">
+    <view class="result-content">
+      <view class="userinfo">
+        <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+        <text>发了一个拼字有奖</text>
+      </view>
+      <view class="result-text">
+        <text>{{gameInfo.text}}</text>
+      </view>
+      <view class="btn-area">
+        <button>開</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="share-btn-area">
+    <view class="buttons">
+      <button type="primary" bindtap="share">转发给朋友或群聊</button>
+      <button type="default" bindtap="picture">生成朋友圈图片</button>
+      <text class="link-btn" bindtap="play">我先领个试试</text>
     </view>
   </view>
 </view>

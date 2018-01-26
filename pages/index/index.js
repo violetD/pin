@@ -2,7 +2,6 @@
 //获取应用实例
 const app = getApp()
 const util = require('../../utils/util.js')
-// import { $wuxActionSheet } from '../../components/wux'
 
 Page({
   data: {
@@ -24,26 +23,18 @@ Page({
       value: 30
     }],
     showModal: false,
-    showResult: false,
-    showCanvas: false,
-    imageUrl: null,
     orderId: null
   },
   //事件处理函数
   onLoad: function (options) {
 
-    // options.id = 8;
+    // this.play(36, 1)
+    wx.navigateTo({
+      url: '/pages/picture/picture?id=36'
+    })
     if (options.id) {
       this.play(options.id)
     }
-
-    // wx.redirectTo({
-    //   url: '/pages/hongbao/hongbao',
-    // })
-    // wx.switchTab({
-    //   url: '/pages/rank/rank',
-    // })
-    // return;
 
     var that = this
     //调用应用实例的方法获取全局数据
@@ -54,9 +45,9 @@ Page({
       })
     })
   },
-  play: function (id) {
+  play: function (id, share) {
     wx.navigateTo({
-      url: '/pages/game/game?id=' + id,
+      url: '/pages/game/game?id=' + id + '&share=' + (share || 0),
     })
   },
   setTextValue: function (e) {
@@ -132,24 +123,12 @@ Page({
     data.time = data.time.replace('秒', '');
     app.request('/game/create', data).then(function (data) {   
       that.setData({
-        orderId: data.orderid
+        orderId: data.orderid,
+        text: e.detail.value.text
       })  
       return that.pay(JSON.parse(data.para));
     }).then(function () {
-      that.setData({
-        // showResult: true,
-        text: e.detail.value.text
-      })
-      return app.getSystemInfo()
-    }).then(function () {
-      return that.draw();
-    }).then(function () {
-      return that.saveCanvasToTempFilePath();
-    }).then(function () {
-      that.share();
-      // that.setData({
-      //   showCanvas: false
-      // })
+      that.play(that.data.orderId, 1)
     }).catch(function () {
       console.log(arguments)
     }).then(function () {
@@ -171,155 +150,10 @@ Page({
       // })
     }) 
   },
-  hideResult: function () {
-    this.setData({
-      showResult: false
-    })
-  },
-  generateQr: function () {
-    return new Promise(function (resolve, reject) {
-      wx.request({
-        url: 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=' + app.globalData.authority.access_token,
-        data: {
-          scene: 'id=12',
-          path: 'pages/index/index',
-          width: 430
-        },
-        method: 'POST',
-        success: function ({ data }) {
-          console.log(data)
-          wx.canvasPutImageData({
-            canvasId: 'canvasid',
-            data: data,
-            success: function () {
-              resolve();
-            },
-            fail: function () {
-              reject();
-            }
-          })
-        },
-        fail: function () {
-          reject();
-        }
-      })
-    })
-    
-  },
-  share: function () {   
-
-    const that = this;
-    wx.showActionSheet({
-      itemList: ['转发给朋友或群聊', '生成朋友圈图片', '我先领个试试'],
-      success: function ({ tapIndex }) {
-        switch (tapIndex) {
-          case 0:
-            wx.showShareMenu({
-              success: function () {
-                console.log("success")
-              },
-              fail: function () {
-                console.log("fail")
-              }
-            })
-          break;
-          case 1:
-            that.saveImageToPhotosAlbum().then(function () {
-              console.log("success")
-            }).catch(function () {
-              console.log("fail")
-            });
-          break;
-          case 2:
-            that.play(that.data.orderId);
-          break;
-        }
-      },
-      complete: function () {
-        that.setData({
-          showCanvas: false
-        })
-      }
-    })
-  },
-  setText: function (context) {
-    const text = this.data.text;
-    const { windowWidth, windowHeight } = app.globalData.systemInfo;
-    const fontSize = 24;
-    context.setFontSize(fontSize);
-    context.setFillStyle("#ffedbb");
-    context.fillText(text, windowWidth / 2 - fontSize * text.length / 2, windowHeight * 0.7 * 0.7);
-  },
-  setUserAvatar: function (context) {
-
-    const that = this;
-    const { windowWidth, windowHeight } = app.globalData.systemInfo;
-    const r = windowWidth / 8;
-    return new Promise(function (resolve, reject) {
-      wx.getImageInfo({
-        src: that.data.userInfo.avatarUrl,
-        success: function ({ path, height, width }) {
-          resolve();
-          // context.save();
-          // context.beginPath()
-          // context.arc(windowWidth / 2, windowHeight * 0.2, r, 0, 2 * Math.PI)
-          // context.clip()
-          // context.drawImage(path, windowWidth / 2 - r, windowHeight * 0.2 - r, r * 2, r * 2);
-          // context.restore();
-
-          // resolve();
-        }
-      });
-    })
-  },
-  draw: function () {
-    this.setData({
-      showCanvas: true
-    })
-    const that = this;
-    const context = wx.createCanvasContext('canvasid', this);
-    const path = '/assets/images/hongbao/1.png';
-    const { windowWidth, windowHeight } = app.globalData.systemInfo;
-    context.drawImage(path, 0, 0, windowWidth, windowHeight);
-
-    return this.setUserAvatar(context).then(function () {
-      that.setText(context);
-
-      context.setFontSize(20);
-      context.setFillStyle("#ffedbb");
-      context.fillText("发了一个拼字有奖", windowWidth / 2 - 80, windowHeight * 0.35);
-
-      context.draw();
-    }).then(function () {
-      // return that.generateQr();
-    });
-  },
-  saveCanvasToTempFilePath: function () {
-    const that = this;
-    return new Promise(function (resolve, reject) {
-      // 将生成好的图片保存到本地，需要延迟一会，绘制期间耗时
-      setTimeout(function () {
-        wx.canvasToTempFilePath({
-          canvasId: 'canvasid',
-          success: function (res) {
-            that.setData({
-              imageUrl: res.tempFilePath
-            });
-            resolve();
-          },
-          fail: function (res) {
-            console.log(res);
-            reject();
-          }
-        });
-      }, 200);     
-    });
-  },
   onShareAppMessage: function () {
     return {
       title: '小程序',
-      path: '/pages/index/index' + (this.data.orderid ? '?id=' + this.data.orderid : ''),
-      imageUrl: this.data.imageUrl,
+      path: '/pages/index/index',
       success: function (res) {
         // 转发成功
       },
@@ -327,18 +161,5 @@ Page({
         // 转发失败
       }
     }
-  },
-  saveImageToPhotosAlbum: function () {
-    return new Promise(function (resolve, reject) {
-      wx.saveImageToPhotosAlbum({
-        filePath: res.tempFilePath,
-        success: function () {
-          resolve();
-        },
-        fail: function () {
-          reject();
-        }
-      })
-    });  
   }
 })

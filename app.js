@@ -1,7 +1,7 @@
 //app.js
 App({
   onLaunch: function () {
-    //this.globalData.passportInfo = wx.getStorageSync('local-sid');
+    this.globalData.passportInfo = wx.getStorageSync('local-sid');
   },
 
   login: function () {
