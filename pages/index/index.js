@@ -36,10 +36,7 @@ Page({
   },
   //事件处理函数
   onLoad: function (options) {
-    
-    wx.navigateTo({
-      url: '/pages/appeal/appeal?id=4'
-    })
+
     // options.id = 4;
     // this.play(1, 1)
     // this.play(4)
