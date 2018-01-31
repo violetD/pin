@@ -39,7 +39,7 @@ Page({
 
     // options.id = 4;
     // this.play(1, 1)
-    // this.play(4)
+    this.play(4)
     if (options.id) {
       this.play(options.id)
     }

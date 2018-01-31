@@ -1,8 +1,4 @@
 /**index.wxss**/
-page {
-  font-size: .75rem
-}
-
 .center {
   text-align: center;
 }
@@ -29,11 +25,12 @@ input {
   vertical-align: middle;
   border-bottom: 1px solid #ccc;
   padding: .5rem 1rem;
+  width: 10rem
 }
 
 .label-text {
   display: inline-block;
-  width: 3rem;
+  width: 4rem;
   line-height: 1.4rem;
   margin-right: .5rem;
   vertical-align: middle;
@@ -41,7 +38,7 @@ input {
 }
 
 .description-text {
-  font-size: .6rem;
+  font-size: .8rem;
   color: #ccc;
 }
 
