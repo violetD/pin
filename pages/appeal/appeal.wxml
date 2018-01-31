@@ -1,2 +1,18 @@
 <!--pages/appeal/appeal.wxml-->
-<text>pages/appeal/appeal.wxml</text>
+<view class="title">
+  <text>请选择投诉原因</text>
+</view>
+<view class="card-view">
+  <radio-group bindchange="handleChange">
+    <view class="list">
+      <block wx:for="{{reasons}}" wx:key="{{index}}">
+        <view class="item">
+          <text>{{item.title}}</text>
+          <radio value="{{item.value}}" />
+        </view>
+      </block>
+    </view>
+  </radio-group>
+</view>
+
+<button type="primary" bindtap="handleSubmit">提交</button>
