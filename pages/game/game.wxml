@@ -1,49 +1,50 @@
 <!--game.wxml-->
-<view class="wrapper">
-  <view class="game-view">
-    <view class="userinfo">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text>{{userInfo.nickName}}</text>
-    </view>
-    <view class="question-area">
-      <text>{{gameInfo.text}}</text>
-    </view>
-    <view class="op-area">
-      <button wx:if="{{status===0}}" type="app-default">加载中。。。</button>
-      <button wx:elif="{{status===1}}" type="app-default" bindtap="showModal">点击拼出上面的文字领红包</button>
-      <button wx:elif="{{status===2}}" type="app-warn">加载失败</button>
-      <button wx:elif="{{status===3}}" type="app-warn">红包已领完</button>
-      <button wx:else type="app-warn">红包已失效</button>
-    </view>
-    <view class="btn-area">
-      <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
-        <i class="iconfont icon-money navigator-icon"></i>
-        <text class="navigator-text">去提现</text>
-      </navigator>
-      <navigator class="navigator" url="/pages/index/index" open-type="switchTab" hover-class="navigator-hover">
-        <i class="iconfont icon-add-r navigator-icon"></i>
-        <text class="navigator-text">我要发一个</text>
-      </navigator>
-      <view class="navigator" bindtap="showShare">
-        <i class="iconfont icon-share navigator-icon"></i>      
-        <text class="navigator-text">去转发</text>
-      </view>
+<view class="game-view">
+  <view class="userinfo">
+    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <text>{{userInfo.nickName}}</text>
+  </view>
+  <view class="question-area">
+    <text>{{gameInfo.text}}</text>
+  </view>
+  <view class="op-area">
+    <button wx:if="{{status===0}}" type="app-default">加载中。。。</button>
+    <button wx:elif="{{status===1}}" type="app-default" bindtap="showModal">点击拼出上面的文字领红包</button>
+    <button wx:elif="{{status===2}}" type="app-warn">加载失败</button>
+    <button wx:elif="{{status===3}}" type="app-warn">红包已领完</button>
+    <button wx:else type="app-warn">红包已失效</button>
+  </view>
+  <view class="btn-area">
+    <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
+      <i class="iconfont icon-money navigator-icon"></i>
+      <text class="navigator-text">去提现</text>
+    </navigator>
+    <navigator class="navigator" url="/pages/index/index" open-type="switchTab" hover-class="navigator-hover">
+      <i class="iconfont icon-add-r navigator-icon"></i>
+      <text class="navigator-text">我要发一个</text>
+    </navigator>
+    <view class="navigator" bindtap="showShare">
+      <i class="iconfont icon-share navigator-icon"></i>      
+      <text class="navigator-text">去转发</text>
     </view>
   </view>
-  <view class="info-area">共￥{{gameInfo.money/100}}元，领取{{gameInfo.send_num}}/{{gameInfo.number}}个</view>
-  <view class="desc-area">
-    <text>未领取的金额，将在48小时内退至余额</text>
-  </view>
-  <!--弹窗-->
-  <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
-  <view class="modal-dialog" wx:if="{{showModal}}">
-    <view class="modal-title">提示：请按顺序勾选</view>
-    <view class="modal-content">
-      <view class="countdown"><view class="left" style="animation-duration: {{gameInfo.time}}s; animation-delay: {{gameInfo.time}}s;"></view><view class="right" style="animation-duration: {{gameInfo.time}}s;"></view><view class="text">{{leftTime}}</view></view>
-      <view class="result">{{resultWords}}</view>
-      <view class="words-area">
-        <text class="word {{word.checked ? 'checked' : ''}}" wx:for="{{words}}" wx:for-item="word" wx:key="text" bindtap="bindTap" data-index="{{index}}">{{word.text}}</text>
-      </view>
+</view>
+<view class="info-area">
+  <text>共￥{{gameInfo.money/100}}元，领取{{gameInfo.send_num}}/{{gameInfo.number}}个</text>
+  <navigator class="btn-link" url="/pages/appeal/appeal?id={{gameInfo.game_id}}">投诉</navigator>
+</view>
+<view class="desc-area">
+  <text>未领取的金额，将在48小时内退至余额</text>
+</view>
+<!--弹窗-->
+<view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}">
+  <view class="modal-title">提示：请按顺序勾选</view>
+  <view class="modal-content">
+    <view class="countdown"><view class="left" style="animation-duration: {{gameInfo.time}}s; animation-delay: {{gameInfo.time}}s;"></view><view class="right" style="animation-duration: {{gameInfo.time}}s;"></view><view class="text">{{leftTime}}</view></view>
+    <view class="result">{{resultWords}}</view>
+    <view class="words-area">
+      <text class="word {{word.checked ? 'checked' : ''}}" wx:for="{{words}}" wx:for-item="word" wx:key="text" bindtap="bindTap" data-index="{{index}}">{{word.text}}</text>
     </view>
   </view>
 </view>
@@ -69,7 +70,7 @@
     <view class="buttons">
       <button type="primary" bindtap="share">转发给朋友或群聊</button>
       <button type="default" bindtap="picture">生成朋友圈图片</button>
-      <text class="link-btn" bindtap="play">我先领个试试</text>
+      <text class="btn-link" bindtap="play">我先领个试试</text>
     </view>
   </view>
 </view>

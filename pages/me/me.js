@@ -17,13 +17,13 @@ Page({
         userInfo: userInfo
       })
     })
-
+  },
+  onShow () {
     wx.showLoading({
       title: '加载中',
     })
-
-    app.getMoney().then(function (data) {
-      that.setData({
+    app.getMoney().then((data) => {
+      this.setData({
         money: data
       })
     }).catch(function () {

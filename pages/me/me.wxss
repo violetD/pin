@@ -1,10 +1,8 @@
 /* pages/me/me.wxss */
 @import "../../assets/font/iconfont.wxss";
 
-.wrapper {
-  background-color: #dedede;
-  font-size: .8rem;
-  height: 100vh;
+page {
+  font-size: .75rem
 }
 
 .center {

@@ -51,7 +51,7 @@ Page({
       that.setData({
         gameInfo: data.game
       })
-      if (that.options.share == 1) {
+      if (that.data.options.share == 1) {
         that.showShare();
       } else {
         that.initGame();
@@ -98,8 +98,12 @@ Page({
         clearInterval(that.interval);
         wx.showToast({
           title: '超时啦',
+          complete: () => {
+            that.initGameInfo();
+            that.hideModal();
+          }
         })
-        that.hideModal();
+
       }
     }, 1000);
   },
@@ -126,9 +130,28 @@ Page({
     }
   },
   submit: function () {
+    if (this.data.resultWords !== this.data.gameInfo.text) {
+      return wx.showModal({
+        title: '提示',
+        content: '文字错啦，请重新拼字',
+        complete: () => {
+          this.initGameInfo()
+        }
+      })
+    }
+    if (this.data.gameInfo.time - this.data.leftTime <= 0) {
+      return wx.showModal({
+        title: '提示',
+        content: '超时啦，请重新拼字',
+        complete: () => {
+          this.initGameInfo()
+        }
+      })
+    }
+
     wx.showLoading({
       title: '提交中',
-    })
+    })   
 
     const that = this;
 
@@ -141,9 +164,13 @@ Page({
         title: '中奖啦',
         content: '恭喜获得' + (data.money / 100) + '元红包',
       })
-    }).catch(function () {
-      // TODO
-      // that.initGame();
+    }).catch(function (err) {
+      if (err && err.errmsg) {
+        wx.showModal({
+          title: '提示',
+          content: err.errmsg,
+        })
+      }
     }).then(function () {
       that.initGameInfo();
       wx.hideLoading();

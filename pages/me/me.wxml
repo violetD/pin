@@ -1,30 +1,28 @@
 <!--index.wxml-->
-<view class="wrapper">
-  <view class="card-view">
-    <navigator class="questions" url="/pages/questions/questions" hover-class="navigator-hover">
-      <text>常见问题</text>
+<view class="card-view">
+  <navigator class="questions" url="/pages/questions/questions" hover-class="navigator-hover">
+    <text>常见问题</text>
+  </navigator>
+  <view class="userinfo">
+    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+    <text>{{userInfo.nickName}}</text>
+  </view>
+  <view class="btn-area">
+    <navigator class="navigator" url="/pages/hongbao/hongbao" hover-class="navigator-hover">
+      <i class="iconfont icon-hongbao navigator-icon"></i>
+      <text class="navigator-text">我的记录</text>
     </navigator>
-    <view class="userinfo">
-      <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-      <text>{{userInfo.nickName}}</text>
-    </view>
-    <view class="btn-area">
-      <navigator class="navigator" url="/pages/hongbao/hongbao" hover-class="navigator-hover">
-        <i class="iconfont icon-hongbao navigator-icon"></i>
-        <text class="navigator-text">我的记录</text>
-      </navigator>
-      <i class="navigator-divide"></i>
-      <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
-        <i class="iconfont navigator-icon-text">¥{{money}}</i>
-        <text class="navigator-text">我的余额</text>
-      </navigator>
-      <i class="navigator-divide"></i>
-      <view class="navigator" hover-class="other-navigator-hover">
-        <button open-type="contact" class="contact-con">
-          <i class="iconfont icon-liuyan navigator-icon"></i>
-          <text class="navigator-text">联系客服</text>
-        </button>
-      </view>
+    <i class="navigator-divide"></i>
+    <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
+      <i class="iconfont navigator-icon-text">¥{{money}}</i>
+      <text class="navigator-text">我的余额</text>
+    </navigator>
+    <i class="navigator-divide"></i>
+    <view class="navigator" hover-class="other-navigator-hover">
+      <button open-type="contact" class="contact-con">
+        <i class="iconfont icon-liuyan navigator-icon"></i>
+        <text class="navigator-text">联系客服</text>
+      </button>
     </view>
   </view>
 </view>

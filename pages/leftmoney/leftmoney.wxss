@@ -38,11 +38,6 @@
   padding: 0 1em;
 }
 
-.btn-link {
-  color: blue;
-  text-decoration: underline;
-}
-
 .btn-area {
   display: flex;
   flex-direction: column;

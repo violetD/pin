@@ -55,25 +55,16 @@ Page({
     wx.showLoading({
       title: '加载中',
     })
-    Promise.all([app.request("/game/getAllSummary"), app.request("/game/getAll", {
-      start: this.meStart,
-      end: this.meListPageSize,
-    })]).then(function (data) {
+    app.request("/game/getAllSummary").then((data) => {
       that.setData({
-        totalMoney: (data[0].data.money / 100).toFixed(2),
-        totalNumber: data[0].data.num,
-        me: data[1].list.map(function (item) {
-          return {
-            ...item,
-            formatCreateTime: util.formatTime(item.create_time)
-          }
-        })
+        totalMoney: (data.data.money / 100).toFixed(2),
+        totalNumber: data.data.num,
       })
-    }).catch(function () {
-
-    }).then(function () {
-      wx.hideLoading();
+    }).catch(function () {}).then(function () {
+      wx.hideLoading()
     })
+
+    this.loadList()
   },
   swichNav: function (e) {
     this.setData({
@@ -82,20 +73,22 @@ Page({
   },
   loaded: false,
   bindChange: function (e) {
+    this.setData({
+      currentTab: e.detail.current
+    })
     if (e.detail.current == 1) {
+      const that = this
       if (this.loaded) return;
       this.loaded = true;
       wx.showLoading({
         title: '加载中',
       })
       app.request("/game/getRecieveSummary").then(function (data) {
-        console.log(data)
         that.setData({
           totalRecieveMoney: (data.data.money / 100).toFixed(2),
           totalRecieveNumber: data.data.num,
         })
       }).catch(function () {
-
       }).then(function () {
         wx.hideLoading();
       });
@@ -107,40 +100,38 @@ Page({
   meFinished: false,
   bindMeScroll: function (e) {
     if (this.meFinished) return;
-    this.setData({
-      meLoadingShow: true
-    })
+    
     this.loadList();
   },
   loadList: function () {
     const that = this;
-    wx.showLoading({
-      title: '加载中',
+
+    this.setData({
+      meLoadingShow: true
     })
-    this.meStart += this.meListPageSize;
+    
     app.request("/game/getAll", {
       start: this.meStart,
       end: this.meListPageSize,
-    }).then(function (data) {
-      if (data.list.length === 0) {
+    }).then((data) => {
+      if (data.list.length === 0 || data.list.length < this.meListPageSize) {
         that.setData({
           meLoadingText: '已加载完'
         })
         that.meFinished = true;
-      } else {
-        that.setData({
-          me: that.data.me.concat(data.list.map(function (item) {
-            return {
-              ...item,
-              formatCreateTime: util.formatTime(item.create_time)
-            }
-          }))
-        })
       }
+      that.setData({
+        me: that.data.me.concat(data.list.map(function (item) {
+          return {
+            ...item,
+            formatCreateTime: util.formatTime(item.create_time)
+          }
+        }))
+      })
+      this.meStart += this.meListPageSize;
     }).catch(function () {
 
     }).then(function () {
-      wx.hideLoading();
     })
   },
   recieveStart: 0,
@@ -148,14 +139,14 @@ Page({
   recieveFinished: false,
   bindRecieveScroll: function () {
     if (this.recieveFinished) return;
-    this.setData({
-      recieveLoadingShow: true
-    })
     this.loadRecieveList();
   },
   loadRecieveList: function () {
     const that = this;
 
+    this.setData({
+      recieveLoadingShow: true
+    })
     wx.showLoading({
       title: '加载中',
     })
@@ -164,28 +155,24 @@ Page({
       start: this.recieveStart,
       end: this.recieveListPageSize,
     }).then(function (data) {
-      console.log(data.list)
+      that.setData({
+        recieve: that.data.recieve.concat(data.list.map(function (item) {
+          return {
+            ...item,
+            formatCreateTime: util.formatTime(item.create_time)
+          }
+        }))
+      })
+      that.recieveStart += that.recieveListPageSize;
       if (data.list.length === 0 || data.list.length < that.recieveListPageSize) {
         that.setData({
           recieveLoadingText: '已加载完'
         })
         that.recieveFinished = true;
-      } else {
-        that.setData({
-          recieve: that.data.recieve.concat(data.list.map(function (item) {
-            return {
-              ...item,
-              formatCreateTime: util.formatTime(item.create_time)
-            }
-          }))
-        })
-        that.recieveStart += that.recieveListPageSize;
       }
     }).catch(function () {
-
     }).then(function () {
       wx.hideLoading();
     })
-    
   }
 })

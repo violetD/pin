@@ -43,8 +43,10 @@
 .info-area {
   color: #666;
   font-size: .8em;
-  padding-left: 1em;
+  padding: 0 1em;
   margin-bottom: 100rpx;
+  display: flex;
+  justify-content: space-between;
 }
 
 .desc-area {
@@ -126,13 +128,14 @@
 .words-area {
   display: flex;
   margin-top: .5em;
-  justify-content: space-around;  
+  flex-wrap: wrap;
 }
 
 .words-area .word {
   display: block;
-  border: 1px solid #ccc;
-  margin-right: .5em;
+  border: 1rpx solid #ccc;
+  margin-right: 17rpx;
+  margin-bottom: 17rpx;
   padding: 5rpx 10rpx;
   border-radius: 10rpx;
 }

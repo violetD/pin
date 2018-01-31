@@ -49,6 +49,7 @@
 .info {
   display: flex;
   justify-content: space-between;
+  line-height: 2;
 }
 
 .affiliate {
@@ -60,4 +61,5 @@
   text-align: center;
   color: #777777;
   padding-bottom: 20rpx;
+  font-size: .7em;
 }

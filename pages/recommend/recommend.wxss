@@ -1,1 +1,20 @@
 /* pages/recommend/recommend.wxss */
+
+.item {
+  border-bottom: 1px solid #ccc;
+  display: flex;
+}
+
+.text {
+  width: 622rpx;
+  padding-left: 10rpx;
+}
+
+.title {
+  margin-bottom: 10rpx;
+}
+
+.content {
+  color: #ccc;
+  font-size: 0.8em
+}

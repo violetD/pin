@@ -1,11 +1,9 @@
 <!--pages/share/share.wxml-->
 
-<view class="wrapper">
-  <view class="box">
-    <canvas canvas-id="canvasid" style="width:100%;height:{{contentHeight}}px"></canvas>
-    <view class="btn-area">
-      <button type="primary" bindtap="saveImageToPhotosAlbum">保存到手机</button>
-      <text class="link-btn" bindtap="share">如何发朋友圈</text>
-    </view>
+<view class="box">
+  <canvas canvas-id="canvasid" style="width:100%;height:{{contentHeight}}px"></canvas>
+  <view class="btn-area">
+    <button type="primary" bindtap="saveImageToPhotosAlbum">保存到手机</button>
+    <text class="btn-link" bindtap="share">如何发朋友圈</text>
   </view>
 </view>

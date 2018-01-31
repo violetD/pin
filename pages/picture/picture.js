@@ -91,7 +91,7 @@ Page({
     let qrLeft = (this.data.windowWidth / 2 - qrR);
 
     this.setData({ contentHeight });
-    this.drawSquare(ctx, offsetHeight + this.data.lineHeight * charList.length + avatarR + qrR * 2);
+    ctx.drawImage('/assets/images/hongbao/2.png', 0, 0, this.data.windowWidth, this.data.contentHeight)
 
     this.drawCircleImg(ctx, this.data.userInfo.avatarUrl, hLeft, 10, avatarR);
     this.drawFont(ctx, this.data.title, offsetHeight);
@@ -102,8 +102,8 @@ Page({
       this.drawFont(ctx, chars, height, 24, '#ffedbb');
     }
 
-    this.drawCircleImg(ctx, this.data.userInfo.avatarUrl, qrLeft, height + qrR + 20, qrR);
-
+    
+    this.drawCircleImg(ctx, this.data.gameInfo.qrcode, qrLeft, height + qrR + 20, qrR);  
     this.drawFont(ctx, this.data.footer, height + qrR * 2 + 120);
 
     ctx.draw();
@@ -119,38 +119,6 @@ Page({
     ctx.setStrokeStyle("#00FFFF");
     ctx.clip();
     ctx.drawImage(src, x, y, d, d);
-    ctx.restore();
-  },
-
-  drawSquare: function (ctx, begin) {
-    let halfLineWidth = 4;
-    let lineWidth = halfLineWidth * 2;
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeRect(0, 0, this.data.windowWidth, this.data.contentHeight);
-    ctx.rect(halfLineWidth, halfLineWidth, this.data.windowWidth - lineWidth, this.data.contentHeight - lineWidth);
-    ctx.setFillStyle('#B31800');
-    ctx.fill();
-    ctx.closePath();
-
-    // 半弧
-    let x = this.data.windowWidth - halfLineWidth;
-    let cx = x / 2;
-    let h = 30;
-    let r = (cx * cx - h * h) / (2 * h);
-    let cy = begin - r;
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.setFillStyle('#d93c2b');
-    ctx.fill();
-    ctx.closePath();
-
-    // 外层框
-    ctx.beginPath();
-    ctx.setStrokeStyle('#e7c41f');
-    ctx.setLineWidth(lineWidth);
-    ctx.strokeRect(0, 0, this.data.windowWidth, this.data.contentHeight);
-
     ctx.restore();
   },
 

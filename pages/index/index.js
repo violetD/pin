@@ -3,11 +3,18 @@
 const app = getApp()
 const util = require('../../utils/util.js')
 
+class TransactionError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'TransactionError'
+  }
+}
+
 Page({
   data: {
-    textRange: ['测试字符', '测试字符2'],
+    textRange: ['大吉大利恭喜发财'],
     userInfo: {},
-    text: "我厉害吧",
+    text: "",
     time: "30秒",
     timeValue: 30,
     setTime: "",
@@ -23,16 +30,19 @@ Page({
       value: 30
     }],
     showModal: false,
+    hasPayed: false,
+    para: null,
     orderId: null
   },
   //事件处理函数
   onLoad: function (options) {
-    // wx.navigateTo({
-    //   url: '/pages/picture/picture?id=36',
-    // })
-
+    
+    wx.navigateTo({
+      url: '/pages/appeal/appeal?id=4'
+    })
     // options.id = 4;
-    //this.play(36, 1)
+    // this.play(1, 1)
+    // this.play(4)
     if (options.id) {
       this.play(options.id)
     }
@@ -44,6 +54,18 @@ Page({
       that.setData({
         userInfo: userInfo
       })
+    })
+  },
+  onShow () {
+    wx.showLoading()
+    app.getMoney().then((data) => {
+      this.setData({
+        leftmoney: data
+      })
+    }).catch(function () {
+
+    }).then(function () {
+      wx.hideLoading()
     })
   },
   play: function (id, share) {
@@ -98,7 +120,6 @@ Page({
     })
   },
   formSubmit: function (e) {
-    const that = this;
     if (!e.detail.value.text) {
       this.showError('请输入要拼接的文字内容');
       return;
@@ -119,7 +140,7 @@ Page({
       this.showError('请输入红包个数');
       return;
     }
-    if (e.detail.value.number / e.detail.value.money < 0.01) {
+    if (e.detail.value.money / e.detail.value.number < 0.01) {
       this.showError('人均赏金不能小于0.01元');
       return;
     }
@@ -134,36 +155,79 @@ Page({
     let data = e.detail.value;
     data.money = data.money * 100;
     data.time = data.time.replace('秒', '');
-    app.request('/game/create', data).then(function (data) {   
-      that.setData({
+    app.request('/game/create', data).then((data) => {   
+      this.setData({
         orderId: data.orderid,
-        text: e.detail.value.text
+        text: e.detail.value.text,
+        hasPayed: !!data.has_payed,
+        para: data.para
       })
-      if (!data.has_payed) {
-        return that.pay(JSON.parse(data.para));
+      if (!!data.has_payed) {
+        app.clearMoney()
       }
-    }).then(function () {
-      that.play(that.data.orderId, 1)
-    }).catch(function () {
-      console.log(arguments)
-    }).then(function () {
+    }, (error) => {
+      if (error.errmsg) {
+        throw new TransactionError(error.errmsg)
+      } else {
+        throw new TransactionError('生成订单错误，请稍后重试')
+      }
+    }).then(() => {
+      if (!this.data.hasPayed) {
+        return this.pay(JSON.parse(this.data.para));
+      }
+    }).then(() => {
+      this.play(this.data.orderId)
+    }).catch((error) => {
+      if (error && error.name === 'TransactionError') {
+        wx.showModal({
+          title: '提示',
+          content: error.message,
+        })
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '支付失败',
+        })
+      } 
+    }).then(function () {  
       wx.hideLoading();
     })
   },
+  checkPay: function (orderId) {
+    return app.request('/pay/check', {
+      orderId
+    })
+  },
   pay: function (data) {
+    const that = this;
     return new Promise(function (resolve, reject) {
-      // TODO
-      resolve();
-      // wx.requestPayment({
-      //   ...data,
-      //   success: function () {
-      //     console.log(arguments)
-      //     resolve();
-      //   },
-      //   fail: function () {
-      //     reject();
-      //   }
-      // })
+      
+      // // TODO
+      // setTimeout(() => {
+      //   that.checkPay(that.data.orderId).then(() => {
+      //     resolve()
+      //   }).catch(() => {
+          
+      //   })
+      // }, 5000)
+      // resolve();
+      wx.requestPayment({
+        ...data,
+        success: function () {
+          that.checkPay(that.data.orderId).then(() => {
+            resolve()
+          }).catch(() => {
+            reject()
+          })
+        },
+        fail: function () {
+          wx.hideLoading()
+          wx.showModal({
+            title: '提示',
+            content: '微信付款失败',
+          })
+        }
+      })
     }) 
   },
   onShareAppMessage: function () {

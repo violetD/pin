@@ -5,7 +5,19 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    recommends: [
+      {
+        title: '菠萝盒子',
+        link: 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUzOTU3MDM4OA==&scene=124#wechat_redirect',
+        content: '挂机 魔性 放置 鬼畜 的小游戏 分享平台·，精选了h5(html5)游戏， 无需安装，点击即玩。客官 快点到碗里来吧。 小主等着你的到来哟~~~~~  \\\\\\\\\\\\\\\\\\\\\\\\ o^_^o ///',
+        imageUrl: '/assets/images/recommends/1.png'
+      }, {
+        title: '菠萝盒子',
+        link: 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUzOTU3MDM4OA==&scene=124#wechat_redirect',
+        content: '挂机 魔性 放置 鬼畜 的小游戏 分享平台·，精选了h5(html5)游戏， 无需安装，点击即玩。客官 快点到碗里来吧。 小主等着你的到来哟~~~~~  \\\\\\\\\\\\\\\\\\\\\\\\ o^_^o ///',
+        imageUrl: '/assets/images/recommends/1.png'
+      }
+    ]
   },
 
   /**

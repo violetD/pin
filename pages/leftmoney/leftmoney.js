@@ -5,9 +5,9 @@ var util = require('../../utils/util.js')
 Page({
   data: {
     userInfo: {},
-    leftmoney: '0.00',
+    leftmoney: 0.00,
     withdrawals: '',
-    inWithdrawals: '0.00'
+    inWithdrawals: 0.00
   },
   //事件处理函数
   onLoad: function () {
@@ -20,17 +20,18 @@ Page({
         userInfo: userInfo
       })
     })
-
+  },
+  onShow () {
     wx.showLoading({
       title: '加载中',
     })
-    app.getMoney().then(function (data) {
-      that.setData({
+    app.getMoney().then((data) => {
+      this.setData({
         leftmoney: data
       })
       return app.request('/pay/get_withdraw')
-    }).then(function (data) {
-      that.setData({
+    }).then((data) => {
+      this.setData({
         inWithdrawals: (data.money / 100).toFixed(2)
       })
     }).catch(function () {
@@ -51,28 +52,33 @@ Page({
   },
   bindWithdrawTap: function () {
     const that = this;
-    const withdrawals = this.data.withdrawals;
+    let withdrawals = this.data.withdrawals;
 
     if (!withdrawals) {
-      wx.showModal({
+      return wx.showModal({
         title: '提示',
         content: '提现金额不能为空',
       })
-      return;
     }
+    if (!util.testMoney(withdrawals)) {
+      return wx.showModal({
+        title: '提示',
+        content: '提现金额格式错误，只能有两位小数',
+      })
+    }
+    withdrawals = Number(withdrawals)
     if (withdrawals > this.data.leftmoney) {
-      wx.showModal({
+      return wx.showModal({
         title: '提示',
         content: '提现金额不能超过余额',
       })
-      return;
     }
-    if (withdrawals.toFixed(2) === 0.00) {
-      wx.showModal({
+
+    if (withdrawals <= 0.01) {
+      return wx.showModal({
         title: '提示',
-        content: '提现金额不能为0',
+        content: '提现金额必须大于1分',
       })
-      return;
     }
     wx.showLoading({
       title: '提交中',
@@ -81,13 +87,18 @@ Page({
     app.request('/pay/order_withdraw', {
       money: this.data.withdrawals * 100
     }).then(function () {
-      wx.showToast({
-        title: '提交提现成功',
-      })
-      that.setData({
-        withdrawals: '',
-        leftmoney: (that.data.leftmoney - withdrawals).toFixed(),
-        inWithdrawals: (that.data.inWithdrawals + withdrawals).toFixed()
+      
+      wx.showModal({
+        title: '提示',
+        content: '提交提现成功',
+        success: function () {
+          app.clearMoney()
+          that.setData({
+            withdrawals: '',
+            leftmoney: (that.data.leftmoney - withdrawals).toFixed(2),
+            inWithdrawals: (that.data.inWithdrawals - 0 + withdrawals).toFixed(2)
+          })
+        }
       })
     }).catch(function () {
 

@@ -1,16 +1,6 @@
 /**index.wxss**/
-canvas {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-
-.wrapper {
-  background-color: #dedede;
-  font-size: .8rem;
+page {
+  font-size: .75rem
 }
 
 .center {
@@ -21,7 +11,7 @@ canvas {
   background-color: #fff;
   position: relative;
   padding: 2rem 1rem 1rem;
-  box-shadow: 2px 2px 5px #bbb;
+  box-shadow: 2rpx 2rpx 5rpx #bbb;
 }
 
 .userinfo-avatar {
@@ -43,7 +33,7 @@ input {
 
 .label-text {
   display: inline-block;
-  width: 120rpx;
+  width: 3rem;
   line-height: 1.4rem;
   margin-right: .5rem;
   vertical-align: middle;
@@ -57,8 +47,8 @@ input {
 
 .input-picker {
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: 1rem;
+  height: 1rem;
 }
 
 .input-picker view {
@@ -66,8 +56,8 @@ input {
 }
 
 .input-image {
-  width: 1em;
-  height: 1em;
+  width: 1rem;
+  height: 1rem;
 }
 
 .radio-group {
@@ -81,13 +71,13 @@ input {
 }
 
 .radio-group label {
-  border: 1px solid #ccc;
-  padding: 1em;
+  border: 1rpx solid #ccc;
+  padding: .125rem;
   border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
+  width: 2.5rem;
+  height: 2.5rem;
   text-align: center;
-  line-height: 2.5em;
+  line-height: 2.5rem;
 }
 
 .radio-group label.checked {
@@ -133,11 +123,15 @@ input {
   padding: 50rpx 32rpx;
 }
 
+.modal-input input {
+  width: 320rpx
+}
+
 .modal-footer {
   display: flex;
   flex-direction: row;
   height: 86rpx;
-  border-top: 1px solid #dedede;
+  border-top: 1rpx solid #dedede;
   font-size: 34rpx;
   line-height: 86rpx;
 }
@@ -146,7 +140,7 @@ input {
   width: 50%;
   color: #666;
   text-align: center;
-  border-right: 1px solid #dedede;
+  border-right: 1rpx solid #dedede;
 }
 
 .btn-confirm {
