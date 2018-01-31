@@ -1,6 +1,6 @@
 /**app.wxss**/
 page {
-  background-color: #efefef;
+  background-color: #dedede;
 }
 
 .container {
@@ -10,10 +10,6 @@ page {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-}
-
-.wrapper {
-  height: 100vh;
 }
 
 button[type="app-primary"] {
@@ -69,6 +65,7 @@ button[type="app-warn"] {
   border-radius: 50%;
 }
 
-.link-btn {
-  color: #007fff;
+.btn-link {
+  color:blue;
+  text-decoration:underline;
 }

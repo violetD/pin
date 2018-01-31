@@ -110,13 +110,17 @@ App({
     }
   },
 
-  request: function (path, params, method) {
+  request: function (path, params, method, showCommonError) {
     const that = this;
+    showCommonError = showCommonError || 1
     return new Promise(function (resolve, reject) {
       wx.request({
         url: that.globalData.requestUrl + path + '?token=' + (that.globalData.passportInfo ? that.globalData.passportInfo.token : ''),
         data: params,
         method: method || 'GET',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
         success: function ({ statusCode, data }) {
           if (statusCode === 200) {
             if (data.errno === 0) {
@@ -137,9 +141,13 @@ App({
                 title: '错误提示',
                 content: '网络错误',
               });
-              reject();
+              reject(data);
             }
           } else {
+            wx.showModal({
+              title: '错误提示',
+              content: '网络错误',
+            });
             reject();
           }      
         },
@@ -184,6 +192,9 @@ App({
       }     
     })
   },
+  clearMoney () {
+    this.globalData.leftMoney = null
+  },
   globalData: {
     userInfo: null,
     passportInfo: null,
@@ -191,6 +202,7 @@ App({
     systemInfo: null,
     tryLogin: false,
     leftMoney: null,
-    requestUrl: 'http://47.92.33.106'
+    // requestUrl: 'http://47.92.33.106',
+    requestUrl: 'https://moneyminiapp.guolaiwanba.com',
   }
 })

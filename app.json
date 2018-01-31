@@ -7,30 +7,26 @@
     "pages/recommend/recommend",
     "pages/game/game",
     "pages/questions/questions",
-    "pages/picture/picture"
+    "pages/picture/picture",
+    "pages/appeal/appeal"
   ],
   "window":{
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "拼红包",
+    "navigationBarTitleText": "来福",
     "navigationBarTextStyle":"black",
-    "backgroundColor": "#cccccc"
+    "backgroundColor": "#ffffff"
   },
   "tabBar": {
     "color": "#333",
     "selectedColor": "#B31800",
-    "borderStyle": "#cccccc",
+    "borderStyle": "#dedede",
     "backgroundColor": "#ffffff",
     "list": [{
       "pagePath": "pages/index/index",
       "iconPath": "assets/images/add.png",
       "selectedIconPath": "assets/images/add_s.png",
       "text": "发一个"
-    }, {
-      "pagePath": "pages/recommend/recommend",
-      "iconPath": "assets/images/recommend.png",
-      "selectedIconPath": "assets/images/recommend_s.png",
-      "text": "更多推荐"
     }, {
       "pagePath": "pages/me/me",
       "iconPath": "assets/images/me.png",

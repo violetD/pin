@@ -20,7 +20,12 @@ function testNumber(n) {
   return !!/^[0-9]*[1-9][0-9]*$/.exec(n.toString())
 }
 
+function testMoney(n) {
+  return !!/^[0-9]+([.]\d{1,2})?$/.test(n.toString())
+}
+
 module.exports = {
   formatTime: formatTime,
-  testNumber: testNumber
+  testNumber: testNumber,
+  testMoney: testMoney
 }
