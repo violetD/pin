@@ -32,7 +32,8 @@ Page({
     showModal: false,
     hasPayed: false,
     para: null,
-    orderId: null
+    orderId: null,
+    gameId: null
   },
   //事件处理函数
   onLoad: function (options) {
@@ -154,6 +155,7 @@ Page({
     data.time = data.time.replace('秒', '');
     app.request('/game/create', data).then((data) => {   
       this.setData({
+        gameId: data.gameid,
         orderId: data.orderid,
         text: e.detail.value.text,
         hasPayed: !!data.has_payed,
@@ -173,7 +175,7 @@ Page({
         return this.pay(JSON.parse(this.data.para));
       }
     }).then(() => {
-      this.play(this.data.orderId)
+      this.play(this.data.gameId)
     }).catch((error) => {
       if (error && error.name === 'TransactionError') {
         wx.showModal({
