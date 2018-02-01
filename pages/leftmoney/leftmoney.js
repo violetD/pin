@@ -74,10 +74,10 @@ Page({
       })
     }
 
-    if (withdrawals <= 0.01) {
+    if (withdrawals < 1) {
       return wx.showModal({
         title: '提示',
-        content: '提现金额必须大于1分',
+        content: '提现金额必须大于等于1元',
       })
     }
     wx.showLoading({
@@ -100,8 +100,24 @@ Page({
           })
         }
       })
-    }).catch(function () {
-
+    }).catch(function (error) {
+      let message
+      if (error && error.errno) {
+        switch (error.errno) {
+          case 4:
+            message = '提现订单不能超过3笔，请稍后再试'
+            break;
+          case 5:
+            message = '提现金额不能超过余额'
+            break;
+        }
+      }
+      if (message) {
+        wx.showModal({
+          title: '提示',
+          content: message
+        })
+      }
     }).then(function () {
       wx.hideLoading()
     })
