@@ -91,35 +91,53 @@ Page({
     let qrLeft = (this.data.windowWidth / 2 - qrR);
 
     this.setData({ contentHeight });
-    ctx.drawImage('/assets/images/hongbao/2.png', 0, 0, this.data.windowWidth, this.data.contentHeight)
-
-    this.drawCircleImg(ctx, this.data.userInfo.avatarUrl, hLeft, 10, avatarR);
-    this.drawFont(ctx, this.data.title, offsetHeight);
 
     let height = offsetHeight + 20;
-    for (let chars of charList) {
-      height += this.data.lineHeight;
-      this.drawFont(ctx, chars, height, 24, '#ffedbb');
-    }
 
-    
-    this.drawCircleImg(ctx, this.data.gameInfo.qrcode, qrLeft, height + qrR + 20, qrR);  
-    this.drawFont(ctx, this.data.footer, height + qrR * 2 + 120);
+    ctx.drawImage('/assets/images/hongbao/2.png', 0, 0, this.data.windowWidth, this.data.contentHeight)
 
-    ctx.draw();
+    this.drawCircleImg(ctx, this.data.userInfo.avatarUrl, hLeft, 10, avatarR).then(() => {
+      this.drawFont(ctx, this.data.title, offsetHeight);
+      
+      for (let chars of charList) {
+        height += this.data.lineHeight;
+        this.drawFont(ctx, chars, height, 24, '#ffedbb');
+      }
+      return this.drawCircleImg(ctx, this.data.gameInfo.qrcode, qrLeft, height + qrR + 20, qrR)
+    }).then(() => {
+      this.drawFont(ctx, this.data.footer, height + qrR * 2 + 120);
+      ctx.draw();
+    }).catch(function () {
+      console.log(arguments)
+      wx.showModal({
+        title: '提示',
+        content: '生成图片失败，请稍后再试',
+      })
+    })
   },
 
   drawCircleImg: function (ctx, src, x, y, r) {
-    let d = 2 * r;
-    let cx = x + r;
-    let cy = y + r;
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.setStrokeStyle("#00FFFF");
-    ctx.clip();
-    ctx.drawImage(src, x, y, d, d);
-    ctx.restore();
+    return new Promise((resolve, reject) => {
+      wx.getImageInfo({
+        src,
+        success: ({ path }) => {
+
+          let d = 2 * r;
+          let cx = x + r;
+          let cy = y + r;
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+          ctx.setStrokeStyle("#00FFFF");
+          ctx.clip();
+          ctx.drawImage(path, x, y, d, d);
+          ctx.restore();
+
+          resolve()
+        }
+      })
+    })
+
   },
 
   drawFont: function (ctx, content, height, fontsize, color) {
