@@ -202,7 +202,6 @@ App({
     systemInfo: null,
     tryLogin: false,
     leftMoney: null,
-    // requestUrl: 'http://47.92.33.106',
     requestUrl: 'https://moneyminiapp.guolaiwanba.com',
   }
 })

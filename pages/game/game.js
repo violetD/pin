@@ -183,8 +183,8 @@ Page({
   },
   onShareAppMessage: function () {
     return {
-      title: this.gameInfo.text,
-      path: '/pages/index/index' + (this.options.id ? '?id=' + this.options.id : ''),
+      title: this.data.gameInfo.text,
+      path: '/pages/index/index' + (this.data.options.id ? '?id=' + this.data.options.id : ''),
       success: function (res) {
         // 转发成功
       },
@@ -192,11 +192,6 @@ Page({
         // 转发失败
       }
     }
-  },
-  share: function () {
-    wx.showShareMenu({
-      
-    })
   },
   play: function () {
     this.initGame();

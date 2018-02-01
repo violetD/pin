@@ -68,7 +68,7 @@
 
   <view class="share-btn-area">
     <view class="buttons">
-      <button type="primary" bindtap="share">转发给朋友或群聊</button>
+      <button type="primary" open-type="share">转发给朋友或群聊</button>
       <button type="default" bindtap="picture">生成朋友圈图片</button>
       <text class="btn-link" bindtap="play">我先领个试试</text>
     </view>

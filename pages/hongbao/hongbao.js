@@ -64,6 +64,8 @@ Page({
       wx.hideLoading()
     })
 
+  },
+  onShow () {
     this.loadList()
   },
   swichNav: function (e) {

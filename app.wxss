@@ -68,4 +68,9 @@ button[type="app-warn"] {
 .btn-link {
   color:blue;
   text-decoration:underline;
+  background: transparent;
+}
+
+.btn-link::after {
+  border: none;
 }

@@ -38,9 +38,6 @@ Page({
   //事件处理函数
   onLoad: function (options) {
 
-    // options.id = 4;
-    // this.play(1, 1)
-    // this.play(4)
     if (options.id) {
       this.play(options.id)
     }
@@ -200,16 +197,6 @@ Page({
   pay: function (data) {
     const that = this;
     return new Promise(function (resolve, reject) {
-      
-      // // TODO
-      // setTimeout(() => {
-      //   that.checkPay(that.data.orderId).then(() => {
-      //     resolve()
-      //   }).catch(() => {
-          
-      //   })
-      // }, 5000)
-      // resolve();
       wx.requestPayment({
         ...data,
         success: function () {

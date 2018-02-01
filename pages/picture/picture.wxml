@@ -4,6 +4,6 @@
   <canvas canvas-id="canvasid" style="width:100%;height:{{contentHeight}}px"></canvas>
   <view class="btn-area">
     <button type="primary" bindtap="saveImageToPhotosAlbum">保存到手机</button>
-    <text class="btn-link" bindtap="share">如何发朋友圈</text>
+    <button class="btn-link" open-type="share">如何发朋友圈</button>
   </view>
 </view>
