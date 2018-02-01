@@ -23,7 +23,8 @@ Page({
     words: [],
     resultWords: '',
     leftTime: 0,
-    showShare: false
+    showShare: false,
+    hasPlay: false
   },
   //事件处理函数
   onLoad: function (options) {
@@ -47,9 +48,10 @@ Page({
   },
   initGameInfo: function () {
     const that = this;
-    app.request('/game/fetch', { id: this.data.options.id }).then(function (data) {
+    app.request('/game/fetch', { id: this.data.options.id, game: 1 }).then(function (data) {
       that.setData({
-        gameInfo: data.game
+        gameInfo: data.game,
+        hasPlay: data.has_play
       })
       if (that.data.options.share == 1) {
         that.showShare();
@@ -66,7 +68,7 @@ Page({
   },
   initGame: function () {
     const game = this.data.gameInfo;
-    const status = game.status == 1 ? 1 : game.status == 2 ? 3 : -1;
+    let status = game.status == 1 ? 1 : game.status == 2 ? 3 : -1;
     let words = [];
     for (let i = 0; i < game.text.length; i++) {
       words.push({
@@ -76,6 +78,8 @@ Page({
     }
     words.shuffle();
     game.money = (game.money / 100).toFixed(2);
+
+    if (this.data.hasPlay) status = 4
     this.setData({
       status,
       leftTime: game.time,
