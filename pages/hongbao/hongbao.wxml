@@ -26,16 +26,18 @@
     <scroll-view scroll-y="{{true}}" bindscrolltolower="bindMeScroll" style="height:{{clientHeight-swiperTabHeight-meScrollViewHeight}}px">
       <view class="list">
         <block wx:for="{{me}}" wx:key="{{index}}">
-          <view class="item">
-            <view class="info">         
-              <view>{{item.text}}</view>
-              <view>{{item.money/100}} 元</view>
+          <navigator url="/pages/game/game?id={{item.game_id}}">
+            <view class="item">
+              <view class="info">         
+                <view>{{item.text}}</view>
+                <view>{{item.money/100}} 元</view>
+              </view>
+              <view class="info affiliate">
+                <view>{{item.formatCreateTime}}</view>
+                <view>{{item.send_num}}/{{item.number}}</view>
+              </view>
             </view>
-            <view class="info affiliate">
-              <view>{{item.formatCreateTime}}</view>
-              <view>{{item.send_num}}/{{item.number}}</view>
-            </view>
-          </view>
+          </navigator>
         </block>
       </view>
       <view class="loading" style="display:{{meLoadingShow ? 'block' : 'none'}}">{{meLoadingText}}</view>
