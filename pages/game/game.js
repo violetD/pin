@@ -165,6 +165,9 @@ Page({
       wx.showModal({
         title: '中奖啦',
         content: '恭喜获得' + (data.money / 100) + '元红包',
+        success: function () {
+          app.clearMoney()
+        }
       })
     }).catch(function (err) {
       if (err && err.errmsg) {
