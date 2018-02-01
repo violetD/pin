@@ -108,6 +108,8 @@ Page({
     }, 1000);
   },
   hideModal: function () {
+    clearInterval(this.interval)
+    this.initGameInfo()
     this.setData({
       showModal: false
     })
