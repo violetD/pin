@@ -71,8 +71,7 @@ button[type="app-warn"] {
 }
 
 .btn-link {
-  color:blue;
-  text-decoration:underline;
+  color: #5ba9ef;
   background: transparent;
 }
 
