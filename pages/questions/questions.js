@@ -9,7 +9,12 @@ Page({
    * 页面的初始数据
    */
   data: {
-    questions: []
+    questions: [],
+    top: '60%',
+    left: 0,
+    windowHeight: null,
+    windowWidth: null,
+    initPosData: null
   },
 
   /**
@@ -25,6 +30,15 @@ Page({
         }
       })
     })
+
+    wx.getSystemInfo({
+      success: ({ windowHeight, windowWidth }) => {
+        this.setData({
+          windowHeight,
+          windowWidth
+        })
+      },
+    })
   },
 
   /**
@@ -38,7 +52,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    let query = wx.createSelectorQuery()
+    query.select('#button').boundingClientRect()
+    query.exec((res) => {
+      this.setData({
+        initPosData: res[0],
+        left: res[0].left,
+        top: res[0].top
+      })
+    })
   },
 
   /**
@@ -74,5 +96,27 @@ Page({
     this.setData({
       [key]: !this.data.questions[e.currentTarget.dataset.index].hidden
     })
+  },
+
+  offsetLeft: 0,
+  offsetTop: 0,
+  startMove (e) {
+    this.offsetLeft = e.changedTouches[0].pageX - this.data.left
+    this.offsetTop = e.changedTouches[0].pageY - this.data.top
+  },
+
+  move: function (e) {
+
+    const pos = e.changedTouches[0]
+    if (pos.pageY - this.offsetTop >= 0 && 
+      this.data.windowHeight >= pos.pageY + this.data.initPosData.height - this.offsetTop &&
+      pos.pageX - this.offsetLeft >= 0 &&
+      this.data.windowWidth >= pos.pageX + this.data.initPosData.width - this.offsetLeft
+    ) {
+      this.setData({
+        top: (pos.pageY - this.offsetTop),
+        left: (pos.pageX - this.offsetLeft)
+      })
+    }
   }
 })

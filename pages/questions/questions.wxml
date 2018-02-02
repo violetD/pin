@@ -1,16 +1,19 @@
 <!--pages/questions/questions.wxml-->
-<view class="wrapper">
-  <view class="list">
-    <block wx:for="{{questions}}" wx:key="{{index}}">
-      <view class="item">
-        <view class="question-title {{ item.hidden ? '' : 'show'}}">
-          <text class="title">{{item.title}}</text>
-          <view class="title-icon" bindtap="bindTap" data-index="{{index}}">
-            <text class="iconfont icon-view-list"></text>
-          </view>
+<view class="list">
+  <block wx:for="{{questions}}" wx:key="{{index}}">
+    <view class="item">
+      <view class="question-title {{ item.hidden ? '' : 'show'}}">
+        <text class="title">{{item.title}}</text>
+        <view class="title-icon" bindtap="bindTap" data-index="{{index}}">
+          <text class="iconfont icon-view-list"></text>
         </view>
-        <view class="question" hidden="{{item.hidden}}">{{item.description}}</view>
       </view>
-    </block>
-  </view>
+      <view class="question" hidden="{{item.hidden}}">{{item.description}}</view>
+    </view>
+  </block>
 </view>
+
+<button id="button" style="top: {{top}}px; left: {{left}}px" type="primary" open-type="contact" bindtouchstart="startMove" catchtouchmove="move">
+  <i class="iconfont icon-wechat"></i>
+  <text>客服</text>
+</button>

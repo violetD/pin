@@ -41,3 +41,26 @@
   padding: 15rpx 0;
   line-height: 1.5;
 }
+
+button[type="primary"] {
+  position: fixed;
+  left: 0;
+  top: 60%;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  width: 120rpx;
+  height: 120rpx;
+  font-size: 80%;
+}
+
+button[type="primary"] .iconfont {
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 48rpx;
+}
+
+button[type="primary"] text {
+  height: 60rpx;
+  line-height: 40rpx;
+}
