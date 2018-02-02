@@ -33,7 +33,8 @@ Page({
     hasPayed: false,
     para: null,
     orderId: null,
-    gameId: null
+    gameId: null,
+    leftmoney: '0.00'
   },
   //事件处理函数
   onLoad: function (options) {
@@ -52,13 +53,26 @@ Page({
     })
   },
   onShow () {
-    wx.showLoading()
+    wx.showLoading({
+      title: '加载中'
+    })
+
+    if (!app.finishLogin) this.init()
+  },
+  init () {
+    const that = this;
     app.getMoney().then((data) => {
       this.setData({
         leftmoney: data
       })
-    }).catch(function () {
-
+    }).catch(function (res) {
+      if (res && res.errno && res.errno == -1) {
+        setTimeout(function () {
+          if (!app.finishLogin || app.passportInfo) {
+            that.init()
+          }
+        }, 500);
+      }
     }).then(function () {
       wx.hideLoading()
     })
