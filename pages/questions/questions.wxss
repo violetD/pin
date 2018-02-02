@@ -1,6 +1,4 @@
 /* pages/questions/questions.wxss */
-@import "../../assets/font/iconfont.wxss";
-
 .list {
   padding: 30rpx;
 }

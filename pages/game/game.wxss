@@ -1,6 +1,4 @@
 /* pages/game/game.wxss */
-@import "../../assets/font/iconfont.wxss";
-
 .game-view {
   background-color: #B31800;
   padding-top: 50rpx;

@@ -9,10 +9,8 @@
         <label>
           <text class="label-text">设置文字</text>
           <input name="text" value="{{text}}" placeholder="请输入文字(24字内)" maxlength="24"/>
-          <picker class="input-picker" mode="selector" range="{{textRange}}" bindchange="setTextValue">
-            <view>
-              <image mode="aspectFit" class="input-image" src="../../assets/images/extend.png"></image>
-            </view>
+          <picker class="input-picker input-image" mode="selector" range="{{textRange}}" bindchange="setTextValue">
+            <view><i class="iconfont icon-extend input-image"></i></view>
           </picker>
         </label>    
       </view>
@@ -31,11 +29,11 @@
           <input type="number" name="number" value="" placeholder="填写数量"/>个
         </label>    
       </view>
-      <view class="section section-gap">
+      <view class="section section-gap" bindtap="showSetTime">
         <label>
           <text class="label-text">挑战时间</text>
           <input type="digit" name="time" value="{{time}}" disabled="true" />
-          <image mode="aspectFit" class="input-image" src="../../assets/images/forward.png" bindtap="showSetTime"></image>
+          <i class="iconfont icon-forward input-image"></i>
         </label>    
       </view>
       <view class="section">
