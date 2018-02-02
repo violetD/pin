@@ -50,6 +50,9 @@ Page({
       title: '获取数据中',
     }) 
     this.initGameInfo();
+    this.initSendList();
+  },
+  initSendList: function () {
     app.request('/game/getSendList', {
       game_id: this.data.options.id
     }).then((data) => {
@@ -191,6 +194,7 @@ Page({
           app.clearMoney()
         }
       })
+      that.initSendList()
     }).catch(function (err) {
       if (err && err.errmsg) {
         wx.showModal({
