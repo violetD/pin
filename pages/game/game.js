@@ -24,7 +24,8 @@ Page({
     resultWords: '',
     leftTime: 0,
     showShare: false,
-    hasPlay: false
+    hasPlay: false,
+    list: []
   },
   //事件处理函数
   onLoad: function (options) {
@@ -34,9 +35,7 @@ Page({
 
     var that = this
     //调用应用实例的方法获取全局数据
-    wx.showLoading({
-      title: '获取数据中',
-    }) 
+    
     app.getUserInfo(function (userInfo) {
       //更新数据
       that.setData({
@@ -44,7 +43,26 @@ Page({
       })
     })
 
+    
+  },
+  onShow: function () {
+    wx.showLoading({
+      title: '获取数据中',
+    }) 
     this.initGameInfo();
+    app.request('/game/getSendList', {
+      game_id: this.data.options.id
+    }).then((data) => {
+      this.setData({
+        list: data.list.map((item) => {
+          return {
+            ...item,
+            formatTime: util.formatSimpleTime(item.create_time),
+            formatMoney: (item.money / 100).toFixed(2)
+          }
+        })
+      })
+    })
   },
   initGameInfo: function () {
     const that = this;

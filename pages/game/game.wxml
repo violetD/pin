@@ -37,6 +37,26 @@
 <view class="desc-area">
   <text>未领取的金额，将在48小时内退至余额</text>
 </view>
+
+<view class="list">
+  <block wx:for="{{list}}" wx:key="{{index}}">
+  <view class="item">
+    <image class="userinfo-avatar" src="{{item.avatar}}" background-size="cover"></image>
+    <view class="strech">
+      <view class="info">         
+        <view class="default">{{item.uname}}</view>
+        <view class="stress">{{item.formatMoney}}元</view>
+      </view>
+      <view class="info last">
+        <view>{{item.time}}秒</view>
+        <view>{{item.text}}</view>
+        <view class="default">{{item.formatTime}}</view>
+      </view>
+    </view>
+  </view>
+  </block>
+</view>
+
 <!--弹窗-->
 <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
 <view class="modal-dialog" wx:if="{{showModal}}">

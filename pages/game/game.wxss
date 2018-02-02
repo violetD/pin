@@ -279,3 +279,39 @@
   width: 100%;
   margin-bottom: 30rpx;
 }
+
+.list {
+  margin-top: 30rpx;
+}
+
+.list .item {
+  display: flex;
+}
+
+.list .item .strech {
+  flex: 2;
+  margin-left: 20rpx;
+}
+
+.list .userinfo-avatar {
+  margin-bottom: 0;
+}
+
+.list .item .info {
+  display: flex;
+  height: 64rpx;
+  line-height: 64rpx;
+  justify-content: space-between;
+}
+
+.list .item .last {
+  font-size: 80%;
+}
+
+.stress {
+  color: #B31800;
+}
+
+.default {
+  color: #999;
+}
