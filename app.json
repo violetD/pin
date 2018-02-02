@@ -20,7 +20,7 @@
   "tabBar": {
     "color": "#333",
     "selectedColor": "#B31800",
-    "borderStyle": "#dedede",
+    "borderStyle": "#fefefe",
     "backgroundColor": "#ffffff",
     "list": [{
       "pagePath": "pages/index/index",
