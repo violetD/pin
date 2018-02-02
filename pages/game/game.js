@@ -25,7 +25,8 @@ Page({
     leftTime: 0,
     showShare: false,
     hasPlay: false,
-    list: []
+    list: [],
+    marginTop: '-250rpx'
   },
   //事件处理函数
   onLoad: function (options) {
@@ -67,6 +68,11 @@ Page({
       })
     })
   },
+  resetModal (textLength) {
+    this.setData({
+      marginTop: '-' + ((textLength / 4) * 40 + 250) + 'rpx'
+    })
+  },
   initGameInfo: function () {
     const that = this;
     app.request('/game/fetch', { id: this.data.options.id, game: 1 }).then(function (data) {
@@ -74,6 +80,7 @@ Page({
         gameInfo: data.game,
         hasPlay: data.has_play
       })
+      if (data.game.text.length > 8) that.resetModal(data.game.text.length)
       if (that.data.options.share == 1) {
         that.showShare();
       } else {

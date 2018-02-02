@@ -58,8 +58,8 @@
 </view>
 
 <!--弹窗-->
-<view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
-<view class="modal-dialog" wx:if="{{showModal}}">
+<view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" hidden="{{!showModal}}"></view>
+<view id="modal" class="modal-dialog" hidden="{{!showModal}}" style="margin-top: {{marginTop}}">
   <view class="modal-title">提示：请按顺序勾选</view>
   <view class="modal-content">
     <view class="countdown"><view class="left" style="animation-duration: {{gameInfo.time}}s; animation-delay: {{gameInfo.time}}s;"></view><view class="right" style="animation-duration: {{gameInfo.time}}s;"></view><view class="text">{{leftTime}}</view></view>

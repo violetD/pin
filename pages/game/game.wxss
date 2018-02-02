@@ -23,6 +23,7 @@
   text-align: center;
   color: #e7c41f;
   margin-bottom: 50rpx;
+  padding: 0 50rpx;
 }
 
 .op-area {

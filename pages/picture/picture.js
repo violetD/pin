@@ -69,7 +69,7 @@ Page({
     let chars = '';
     let charsNum = 0;
     for (let char of this.data.gameInfo.text) {
-      if (charsNum === 19) {
+      if (charsNum === 9) {
         charList.push(chars);
         charsNum = 1;
         chars = char;
@@ -80,36 +80,42 @@ Page({
     }
     charList.push(chars);
 
-    this.createImage(10, charList);
+    this.createImage(charList);
   },
 
-  createImage: function (lineNum, charList) {
+  createImage: function (charList) {
     let ctx = wx.createCanvasContext('canvasid');
     let offsetHeight = 120;
-    let contentHeight = lineNum * this.data.lineHeight + offsetHeight + 20;
-
     let avatarR = 40;
-    let hLeft = this.data.windowWidth / 2 - avatarR;
-
     let qrR = 60;
+    let contentHeight = offsetHeight + avatarR * 2 + (charList.length + 2) * this.data.lineHeight + qrR * 2;
+
+    let hLeft = this.data.windowWidth / 2 - avatarR;
     let qrLeft = (this.data.windowWidth / 2 - qrR);
 
     this.setData({ contentHeight });
 
-    let height = offsetHeight + 20;
+    let height = avatarR * 2 + 30;
 
     ctx.drawImage('/assets/images/hongbao/2.png', 0, 0, this.data.windowWidth, this.data.contentHeight)
 
     this.drawCircleImg(ctx, this.data.userInfo.avatarUrl, hLeft, 10, avatarR).then(() => {
-      this.drawFont(ctx, this.data.title, offsetHeight);
-      
+
+      this.drawFont(ctx, this.data.title, height);
+      height += this.data.lineHeight;
+
       for (let chars of charList) {
         height += this.data.lineHeight;
         this.drawFont(ctx, chars, height, 24, '#ffedbb');
       }
-      return this.drawCircleImg(ctx, this.data.gameInfo.qrcode, qrLeft, height + qrR + 20, qrR)
+      
+      height += this.data.lineHeight;
+
+      return this.drawCircleImg(ctx, this.data.gameInfo.qrcode, qrLeft, height, qrR)
+
     }).then(() => {
-      this.drawFont(ctx, this.data.footer, height + qrR * 2 + 120);
+      height += qrR * 2 + this.data.lineHeight;
+      this.drawFont(ctx, this.data.footer, height);
       ctx.draw();
     }).catch(function () {
       wx.showModal({
@@ -222,5 +228,12 @@ Page({
         })
       }
     });
+  },
+
+  help() {
+    wx.showModal({
+      title: '说明',
+      content: '将二维码图片保存到手机，发朋友圈时选择该图片即可',
+    })
   }
 })
