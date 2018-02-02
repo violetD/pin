@@ -70,9 +70,9 @@ Page({
   },
 
   bindTap: function (e) {
-    const key = 'questions[' + e.target.dataset.index + '].hidden';
+    const key = 'questions[' + e.currentTarget.dataset.index + '].hidden';
     this.setData({
-      [key]: !this.data.questions[e.target.dataset.index].hidden
+      [key]: !this.data.questions[e.currentTarget.dataset.index].hidden
     })
   }
 })

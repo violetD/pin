@@ -5,19 +5,39 @@
   padding: 30rpx;
 }
 
+.list .item {
+  border: 1rpx solid #eee;
+  border-radius: 10rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0px 0px 3px #eee;
+  padding: 0 30rpx;
+}
+
+.show .title {
+  color: #ccc;
+}
+
 .question-title {
   position: relative;
   padding-right: 1.5em;
+  height: 100rpx;
+  line-height: 100rpx;
+}
+
+.title-icon {
+  position: absolute;
+  width: 80rpx;
+  right: -30rpx;
+  top: 0;
 }
 
 .icon-view-list {
   font-size: 1.2em;
-  position: absolute;
-  right: 0;
 }
 
 .question {
   margin-top: 15rpx;
-  border-top: 1rpx dashed #efefef;
-  padding-top: 15rpx;
+  border-top: 1rpx solid #efefef;
+  padding: 15rpx 0;
+  line-height: 1.5;
 }
