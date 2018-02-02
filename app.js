@@ -64,26 +64,33 @@ App({
   thirdLogin: function (code) {
     const that = this;
     return new Promise(function (resolve, reject) {
-      wx.request({
-        url: that.globalData.requestUrl + '/login',
-        data: {
-          code
-        },
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        method: 'POST',
-        success: function ({ statusCode, data }) {
-          if (statusCode === 200 && data.errno === 0) {
-            that.globalData.passportInfo = data;
-            resolve(data);
-          } else {
+      that.getUserInfo(function (userInfo) {
+        wx.request({
+          url: that.globalData.requestUrl + '/login',
+          data: {
+            code,
+            uname: userInfo.nickName,
+            avatar: userInfo.avatarUrl
+          },
+          header: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          method: 'POST',
+          success: function ({ statusCode, data }) {
+            if (statusCode === 200 && data.errno === 0) {
+              that.globalData.passportInfo = data;
+              resolve(data);
+            } else {
+              reject();
+            }
+          },
+          fail: function () {
             reject();
+          },
+          complete: function () {
+            that.globalData.finishLogin = true
           }
-        },
-        fail: function () {
-          reject();
-        }
+        })
       })
     });
   },
@@ -202,6 +209,7 @@ App({
     systemInfo: null,
     tryLogin: false,
     leftMoney: null,
+    finishLogin: false,
     requestUrl: 'https://moneyminiapp.guolaiwanba.com',
   }
 })
