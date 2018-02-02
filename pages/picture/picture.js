@@ -57,6 +57,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+
+    wx.showLoading({
+      title: '图片生成中',
+    })
     this.setData({
       gameInfo: wx.getStorageSync('game_info')
     })
@@ -108,11 +112,12 @@ Page({
       this.drawFont(ctx, this.data.footer, height + qrR * 2 + 120);
       ctx.draw();
     }).catch(function () {
-      console.log(arguments)
       wx.showModal({
         title: '提示',
         content: '生成图片失败，请稍后再试',
       })
+    }).then(() => {
+      wx.hideLoading()
     })
   },
 
