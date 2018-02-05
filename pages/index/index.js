@@ -12,7 +12,13 @@ class TransactionError extends Error {
 
 Page({
   data: {
-    textRange: ['大吉大利恭喜发财'],
+    textRange: [
+      '大吉大利恭喜发财', 
+      '大吉大利，今晚吃鸡',
+      '科学究研表明序汉字的排不怎么响影阅读',
+      '新年快乐, 阖家幸福'
+    ],
+    options: null,
     userInfo: {},
     text: "",
     time: "30秒",
@@ -39,9 +45,9 @@ Page({
   //事件处理函数
   onLoad: function (options) {
 
-    if (options.id) {
-      this.play(options.id)
-    }
+    this.setData({
+      options
+    })
 
     //调用应用实例的方法获取全局数据
     app.getUserInfo((userInfo) => {
@@ -52,6 +58,11 @@ Page({
     })
   },
   onShow () {
+
+    if (this.data.options.id) {
+      this.play(this.data.options.id)
+    }
+
     wx.showLoading({
       title: '加载中'
     })
@@ -167,6 +178,7 @@ Page({
     let data = e.detail.value;
     data.money = data.money * 100;
     data.time = data.time.replace('秒', '');
+    data.form_id = e.detail.formId;
     app.request('/game/create', data).then((data) => {   
       this.setData({
         gameId: data.gameid,
