@@ -15,7 +15,7 @@ Page({
   onLoad: function (options) {
     this.setData({
       options,
-      pageSrc: options.type === 'activity' ? 'https://mp.weixin.qq.com/s/0hyYBSqAOEg7o5rqH_94Pw' : 'https://mp.weixin.qq.com/s/0hyYBSqAOEg7o5rqH_94Pw'
+      pageSrc: options.type === 'activity' ? 'https://moneyminiapp.guolaiwanba.com/api/ActivityService' : 'https://moneyminiapp.guolaiwanba.com/api/CustomService'
     })
   },
 
