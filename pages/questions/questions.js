@@ -118,5 +118,11 @@ Page({
         left: (pos.pageX - this.offsetLeft)
       })
     }
+  },
+
+  showService: function () {
+    wx.navigateTo({
+      url: '/pages/otherpage/otherpage?type=service',
+    })
   }
 })

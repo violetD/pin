@@ -19,7 +19,7 @@
     </navigator>
     <i class="navigator-divide"></i>
     <view class="navigator" hover-class="other-navigator-hover">
-      <button open-type="contact" class="contact-con">
+      <button bindtap="showService" class="contact-con">
         <i class="iconfont icon-liuyan navigator-icon"></i>
         <text class="navigator-text">联系客服</text>
       </button>

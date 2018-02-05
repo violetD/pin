@@ -13,7 +13,7 @@
   </block>
 </view>
 
-<button id="button" style="top: {{top}}px; left: {{left}}px" type="primary" open-type="contact" bindtouchstart="startMove" catchtouchmove="move">
+<button id="button" class="hover-btn" style="top: {{top}}px; left: {{left}}px" type="primary" bindtap="showService" bindtouchstart="startMove" catchtouchmove="move">
   <i class="iconfont icon-wechat"></i>
   <text>客服</text>
 </button>

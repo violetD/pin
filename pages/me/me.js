@@ -26,10 +26,22 @@ Page({
       this.setData({
         money: data
       })
+
+      if (!app.globalData.isAuthorization) {
+        wx.showModal({
+          title: '提示',
+          content: '您还没有完成实名认证，将影响您的提现功能。请前往微信完成认证。如果已完成认证，请忽略该提示。',
+        })
+      }
     }).catch(function () {
 
     }).then(function () {
       wx.hideLoading()
+    })
+  },
+  showService: function () {
+    wx.navigateTo({
+      url: '/pages/otherpage/otherpage?type=service',
     })
   }
 })
