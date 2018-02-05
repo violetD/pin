@@ -22,19 +22,6 @@ App({
         success: function (res) {
           if (res.code) {
             // 发起网络请求
-            wx.request({
-              url: 'https://api.weixin.qq.com/cgi-bin/token',
-              data: {
-                appid: 'wxf0706f4278bb92c8',
-                secret: 'eb42ad3459a11fcf831cfca331a3e3db',
-                grant_type: 'client_credential'
-              },
-              method: 'GET',
-              dataType: 'json',
-              success: function ({ data }) {
-                that.globalData.authority = data
-              }
-            })
             that.thirdLogin(res.code).then(function (data) {
               wx.setStorageSync('local-sid', data);
               resolve();
@@ -191,6 +178,7 @@ App({
       } else {
         that.request('/pay/get_info').then(function (data) {
           that.globalData.leftMoney = (data.money / 100).toFixed(2);
+          that.globalData.isAuthorization = data.status == 0 ? true : false;
           resolve(that.globalData.leftMoney)
 
         }).catch(function () {
@@ -205,10 +193,10 @@ App({
   globalData: {
     userInfo: null,
     passportInfo: null,
-    authority: null,
     systemInfo: null,
     tryLogin: false,
     leftMoney: null,
+    isAuthorization: false,
     finishLogin: false,
     requestUrl: 'https://moneyminiapp.guolaiwanba.com',
   }
