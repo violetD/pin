@@ -78,3 +78,26 @@ button[type="app-warn"] {
 .btn-link::after {
   border: none;
 }
+
+.hover-btn {
+  position: fixed;
+  left: 0;
+  top: 60%;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  width: 120rpx;
+  height: 120rpx;
+  font-size: 80%;
+}
+
+.hover-btn .iconfont {
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 48rpx;
+}
+
+.hover-btn text {
+  height: 60rpx;
+  line-height: 40rpx;
+}

@@ -8,7 +8,8 @@
     "pages/game/game",
     "pages/questions/questions",
     "pages/picture/picture",
-    "pages/appeal/appeal"
+    "pages/appeal/appeal",
+    "pages/otherpage/otherpage"
   ],
   "window":{
     "backgroundTextStyle": "light",

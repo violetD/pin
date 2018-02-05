@@ -1,0 +1,2 @@
+<!--pages/otherpage/otherpage.wxml-->
+<web-view class="web-view" src="{{pageSrc}}"></web-view>

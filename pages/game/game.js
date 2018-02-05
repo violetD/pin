@@ -18,7 +18,8 @@ Page({
       money: '0.00',
       number: 1,
       send_num: 0,
-      text: 'XXX'
+      text: 'XXX',
+      status: 0
     },
     words: [],
     resultWords: '',
@@ -26,7 +27,13 @@ Page({
     showShare: false,
     hasPlay: false,
     list: [],
-    marginTop: '-250rpx'
+    marginTop: '-250rpx',
+    activity: false,
+    top: '60%',
+    left: 0,
+    windowHeight: null,
+    windowWidth: null,
+    initPosData: null
   },
   //事件处理函数
   onLoad: function (options) {
@@ -44,14 +51,37 @@ Page({
       })
     })
 
+    wx.getSystemInfo({
+      success: ({ windowHeight, windowWidth }) => {
+        this.setData({
+          windowHeight,
+          windowWidth
+        })
+      },
+    })
     
   },
   onShow: function () {
+    let query = wx.createSelectorQuery()
+    query.select('#button').boundingClientRect()
+    query.exec((res) => {
+      this.setData({
+        initPosData: res[0],
+        left: res[0].left,
+        top: res[0].top
+      })
+    })
     wx.showLoading({
       title: '获取数据中',
-    }) 
+    })
     this.initGameInfo();
     this.initSendList();
+
+    app.request('/api/ActivityIsOpen', {}).then((data) => {
+      this.setData({
+        activity: data.is_open == 1 ? true : false
+      })
+    })
   },
   initSendList: function () {
     app.request('/game/getSendList', {
@@ -96,7 +126,6 @@ Page({
   },
   initGame: function () {
     const game = this.data.gameInfo;
-    let status = game.status == 1 ? 1 : game.status == 2 ? 3 : -1;
     let words = [];
     for (let i = 0; i < game.text.length; i++) {
       words.push({
@@ -107,9 +136,8 @@ Page({
     words.shuffle();
     game.money = (game.money / 100).toFixed(2);
 
-    if (this.data.hasPlay) status = 4
     this.setData({
-      status,
+      status: this.data.hasPlay ? 2 : 1,
       leftTime: game.time,
       resultWords: '',
       words
@@ -242,5 +270,38 @@ Page({
     wx.navigateTo({
       url: '/pages/picture/picture?id=' + this.options.id
     });
+  },
+  showActivity: function () {
+    wx.navigateTo({
+      url: '/pages/otherpage/otherpage?type=activity',
+    })
+  },
+  bindTap: function (e) {
+    const key = 'questions[' + e.currentTarget.dataset.index + '].hidden';
+    this.setData({
+      [key]: !this.data.questions[e.currentTarget.dataset.index].hidden
+    })
+  },
+
+  offsetLeft: 0,
+  offsetTop: 0,
+  startMove(e) {
+    this.offsetLeft = e.changedTouches[0].pageX - this.data.left
+    this.offsetTop = e.changedTouches[0].pageY - this.data.top
+  },
+
+  move: function (e) {
+
+    const pos = e.changedTouches[0]
+    if (pos.pageY - this.offsetTop >= 0 &&
+      this.data.windowHeight >= pos.pageY + this.data.initPosData.height - this.offsetTop &&
+      pos.pageX - this.offsetLeft >= 0 &&
+      this.data.windowWidth >= pos.pageX + this.data.initPosData.width - this.offsetLeft
+    ) {
+      this.setData({
+        top: (pos.pageY - this.offsetTop),
+        left: (pos.pageX - this.offsetLeft)
+      })
+    }
   }
 })

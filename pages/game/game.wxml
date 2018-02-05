@@ -9,11 +9,14 @@
   </view>
   <view class="op-area">
     <button wx:if="{{status===0}}" type="app-default">加载中。。。</button>
-    <button wx:elif="{{status===1}}" type="app-default" bindtap="showModal">点击拼出上面的文字领红包</button>
-    <button wx:elif="{{status===2}}" type="app-warn">加载失败</button>
-    <button wx:elif="{{status===3}}" type="app-warn">红包已领完</button>
-    <button wx:elif="{{status===4}}" type="app-warn">红包不能重复领取</button>
-    <button wx:else type="app-warn">红包已失效</button>
+    <block wx:elif="{{status===1}}">
+      <button wx:if="{{gameInfo.status==1}}" type="app-default" bindtap="showModal">点击拼出上面的文字领红包</button>
+      <button wx:elif="{{gameInfo.status==0}}" type="app-warn">尚未完成付款</button>
+      <button wx:elif="{{gameInfo.status==2}}" type="app-warn">红包已领完</button>
+      <button wx:else type="app-warn">红包已失效</button>
+    </block>
+    <button wx:elif="{{status===2}}" type="app-warn">红包不能重复领取</button>
+    <button wx:else type="app-warn">加载失败</button>
   </view>
   <view class="btn-area">
     <navigator class="navigator" url="/pages/leftmoney/leftmoney" hover-class="navigator-hover">
@@ -95,3 +98,8 @@
     </view>
   </view>
 </view>
+
+<button id="button" hidden="!activity" style="top: {{top}}px; left: {{left}}px" type="app-primary" class="hover-btn" bindtap="showActivity" bindtouchstart="startMove" catchtouchmove="move">
+  <i class="iconfont icon-hongbao"></i>
+  <text>活动</text>
+</button>
