@@ -84,18 +84,13 @@ Page({
       })
     }
 
-    app.request('', {
+    app.request('/api/Report', {
       'reason': this.data.reason,
-      'id': this.data.options.id
+      'game_id': this.data.options.id
     }).then(() => {
       wx.showModal({
         title: '提示',
         content: '提交成功，感谢您的反馈',
-        complete: () => {
-          wx.navigateBack({
-            
-          })
-        }
       })
     })
   }
