@@ -29,7 +29,7 @@
           <navigator url="/pages/game/game?id={{item.game_id}}">
             <view class="item">
               <view class="info">         
-                <view>{{item.text}}</view>
+                <view class="text">{{item.text}}</view>
                 <view>{{item.money/100}} 元</view>
               </view>
               <view class="info affiliate">
@@ -66,7 +66,7 @@
         <block wx:for="{{recieve}}" wx:key="{{index}}">
           <view class="item">
             <view class="info">         
-              <view>{{item.text}}</view>
+              <view class="text">{{item.text}}</view>
               <view>{{item.money/100}} 元</view>
             </view>
             <view class="info affiliate">
