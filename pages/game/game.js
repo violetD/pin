@@ -62,15 +62,7 @@ Page({
     
   },
   onShow: function () {
-    let query = wx.createSelectorQuery()
-    query.select('#button').boundingClientRect()
-    query.exec((res) => {
-      this.setData({
-        initPosData: res[0],
-        left: res[0].left,
-        top: res[0].top
-      })
-    })
+    
     wx.showLoading({
       title: '获取数据中',
     })
@@ -79,8 +71,26 @@ Page({
 
     app.request('/api/ActivityIsOpen', {}).then((data) => {
       this.setData({
-        activity: data.is_open == 1 ? true : false
+        activity: data.is_open == 1 ? 1 : 0
       })
+
+      if (data.is_open == 1) {
+        setTimeout(() => {
+          let query = wx.createSelectorQuery()
+          query.select('#button').boundingClientRect()
+          query.exec((res) => {
+            this.setData({
+              initPosData: {
+                ...res[0],
+                left: 0
+              },
+              left: 0,
+              top: res[0].top
+            })
+          })
+        }, 300)
+      }
+      
     })
   },
   initSendList: function () {

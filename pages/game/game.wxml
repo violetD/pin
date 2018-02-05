@@ -68,7 +68,7 @@
     <view class="countdown"><view class="left" style="animation-duration: {{gameInfo.time}}s; animation-delay: {{gameInfo.time}}s;"></view><view class="right" style="animation-duration: {{gameInfo.time}}s;"></view><view class="text">{{leftTime}}</view></view>
     <view class="result">{{resultWords}}</view>
     <view class="words-area">
-      <text class="word {{word.checked ? 'checked' : ''}}" wx:for="{{words}}" wx:for-item="word" wx:key="text" bindtap="bindTap" data-index="{{index}}">{{word.text}}</text>
+      <text class="word {{word.checked ? 'checked' : ''}}" wx:for="{{words}}" wx:for-item="word" wx:key="{{index}}" bindtap="bindTap" data-index="{{index}}">{{word.text}}</text>
     </view>
   </view>
 </view>
@@ -99,7 +99,7 @@
   </view>
 </view>
 
-<button id="button" hidden="!activity" style="top: {{top}}px; left: {{left}}px" type="app-primary" class="hover-btn" bindtap="showActivity" bindtouchstart="startMove" catchtouchmove="move">
+<button id="button" hidden="{{!activity}}" style="top: {{top}}px; left: {{left}}px" type="app-primary" class="hover-btn shake-slow" bindtap="showActivity" bindtouchstart="startMove" catchtouchmove="move">
   <i class="iconfont icon-hongbao"></i>
   <text>活动</text>
 </button>
