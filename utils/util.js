@@ -37,6 +37,8 @@ function testMoney(n) {
   return !!/^[0-9]+([.]\d{1,2})?$/.test(n.toString())
 }
 
+
+
 module.exports = {
   formatTime: formatTime,
   testNumber: testNumber,

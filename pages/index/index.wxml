@@ -32,7 +32,7 @@
       <view class="section section-gap" bindtap="showSetTime">
         <label>
           <text class="label-text">挑战时间</text>
-          <input type="digit" name="time" value="{{time}}" disabled="true" />
+          <input type="digit" name="time" value="{{time}}秒" disabled="true" />
           <i class="iconfont icon-forward input-image"></i>
         </label>    
       </view>
@@ -60,7 +60,12 @@
     </view>    
   </view>
   <view class="modal-footer">
-    <view class="btn-cancel" bindtap="onCancel" data-status="cancel">取消</view>
+    <view class="btn-cancel" bindtap="hideModal" data-status="cancel">取消</view>
     <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
   </view>
 </view>
+
+<button id="button" hidden="{{!activity}}" style="top: {{top}}px; left: {{left}}px" type="app-primary" class="hover-btn shake-slow" bindtap="showActivity" bindtouchstart="startMove" catchtouchmove="move">
+  <i class="iconfont icon-hongbao"></i>
+  <text>活动</text>
+</button>

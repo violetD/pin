@@ -18,11 +18,11 @@
       <text class="navigator-text">我的余额</text>
     </navigator>
     <i class="navigator-divide"></i>
-    <view class="navigator" hover-class="other-navigator-hover">
+    <navigator class="navigator" url="/pages/otherpage/otherpage?type=service" hover-class="navigator-hover">
       <button bindtap="showService" class="contact-con">
         <i class="iconfont icon-liuyan navigator-icon"></i>
         <text class="navigator-text">联系客服</text>
       </button>
-    </view>
+    </navigator>
   </view>
 </view>

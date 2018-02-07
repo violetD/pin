@@ -2,6 +2,7 @@
 //获取应用实例
 const app = getApp()
 const util = require('../../utils/util.js')
+const mathHelper = require('../../utils/math.js')
 
 class TransactionError extends Error {
   constructor(message) {
@@ -16,12 +17,11 @@ Page({
       '大吉大利恭喜发财', 
       '大吉大利，今晚吃鸡',
       '科学究研表明序汉字的排不怎么响影阅读',
-      '新年快乐, 阖家幸福'
+      '新年快乐，阖家幸福'
     ],
     options: null,
     userInfo: {},
     text: "",
-    time: "30秒",
     timeValue: 30,
     setTime: "",
     tips: "0.00",
@@ -40,11 +40,17 @@ Page({
     para: null,
     orderId: null,
     gameId: null,
-    leftmoney: '0.00'
+    leftmoney: '0.00',
+    activity: false,
+    top: '60%',
+    left: 0,
+    windowHeight: null,
+    windowWidth: null,
+    initPosData: null
   },
   //事件处理函数
-  onLoad: function (options) {
-
+  onLoad (options) {
+    
     this.setData({
       options
     })
@@ -55,167 +61,174 @@ Page({
       this.setData({
         userInfo
       })
+
+      if (this.data.options.id) {
+        this.play(this.data.options.id)
+      }
+    })
+
+    wx.getSystemInfo({
+      success: ({ windowHeight, windowWidth }) => {
+        this.setData({
+          windowHeight,
+          windowWidth
+        })
+      },
     })
   },
+
   onShow () {
 
-    if (this.data.options.id) {
-      this.play(this.data.options.id)
-    }
-
-    wx.showLoading({
-      title: '加载中'
-    })
-
-    if (!app.finishLogin) this.init()
-  },
-  init () {
-    const that = this;
-    app.getMoney().then((data) => {
+    app.request('/api/ActivityIsOpen', {}).then((data) => {
+      this.setData({
+        activity: data.is_open == 1 ? 1 : 0
+      })
+      // 由于setData到页面刷新需要时间，这里设置定时
+      if (data.is_open == 1) {
+        setTimeout(() => {
+          let query = wx.createSelectorQuery()
+          query.select('#button').boundingClientRect()
+          query.exec((res) => {
+            this.setData({
+              initPosData: {
+                ...res[0],
+                left: 0
+              },
+              left: 0,
+              top: res[0].top
+            })
+          })
+        }, 300)
+      }
+    }).then(() => {
+      return app.getMoney()
+    }).then((data) => {
       this.setData({
         leftmoney: data
       })
-    }).catch(function (res) {
-      if (res && res.errno && res.errno == -1) {
-        setTimeout(function () {
-          if (!app.finishLogin || app.passportInfo) {
-            that.init()
-          }
-        }, 500);
-      }
-    }).then(function () {
-      wx.hideLoading()
-    })
+    }).catch(() => {})
   },
-  play: function (id, share) {
+
+  play (id, share) {
     wx.navigateTo({
       url: '/pages/game/game?id=' + id + '&share=' + (share || 0),
     })
   },
-  setTextValue: function (e) {
+
+  setTextValue (e) {
     this.setData({
       text: this.data.textRange[e.detail.value]
     })
   },
-  setMoney: function (e) {
+  setMoney (e) {
+    let tips = mathHelper.multiply(e.detail.value, 2, 0)
+    if (isNaN(tips)) return
+    tips = mathHelper.divide(Math.floor(tips), 100)
     this.setData({
-      tips: e.detail.value * 0.02
+      tips
     })
   },
-  showSetTime: function () {
+  showSetTime () {
     this.setData({
       setTime: this.data.timeValue,
       showModal: true
     })
   },
-  hideModal: function () {
+  hideModal () {
     this.setData({
       showModal: false
     })
   },
-  setTime: function (e) {
+  setTime (e) {
     this.setData({
       setTime: e.detail.value
     })
   },
-  onCancel: function () {
-    this.hideModal();
-  },
-  onConfirm: function () {
+  onConfirm () {
     this.setData({
       timeValue: this.data.setTime,
-      time: this.data.setTime + "秒"
     })
     this.hideModal();
   },
-  showError: function (message) {
+  showError (message) {
     wx.showModal({
       title: '提示',
       content: message,
       showCancel: false,
-      success: function () {
-
-      }
     })
   },
   formSubmit: function (e) {
-    if (!e.detail.value.text) {
-      this.showError('请输入要拼接的文字内容');
-      return;
+    let text = e.detail.value.text || ''
+    text = text.replace(/\s+/g, '')
+    if (!text) {
+      return this.showError('请输入要拼接的文字内容，不能输入空格')
     }
-    if (e.detail.value.text.length > 24) {
-      this.showError('要拼接的文字内容不能超过24个字');
-      return;
+    if (text.length > 24) {
+      return this.showError('要拼接的文字内容不能超过24个字')
     }
     if ('' === e.detail.value.money) {
-      this.showError('请输入总赏金');
-      return;
+      return this.showError('请输入总赏金')
     }
     if (e.detail.value.money < 1) {
-      this.showError('总赏金不能少于1元');
-      return;
+      return this.showError('总赏金不能少于1元')
     }
     if (e.detail.value.money > 10000) {
-      this.showError('总赏金不能大于10000元');
-      return;
+      return this.showError('总赏金不能大于10000元')
+    }
+    if (!util.testMoney(e.detail.value.money)) {
+      return this.showError('总赏金不能超过两位小数')
     }
     if ('' === e.detail.value.number) {
-      this.showError('请输入红包个数');
-      return;
+      return this.showError('请输入红包个数')
     }
     if (e.detail.value.money / e.detail.value.number < 0.01) {
-      this.showError('人均赏金不能小于0.01元');
-      return;
+      return this.showError('人均赏金不能小于0.01元')
     }
     if (e.detail.value.time > 60) {
-      this.showError('挑战时间不能超过60秒');
-      return;
+      return this.showError('挑战时间不能超过60秒')
     }
     
-    wx.showLoading({
-      title: '提交中',
-    })
-    let data = e.detail.value;
-    data.money = data.money * 100;
-    data.time = data.time.replace('秒', '');
-    data.form_id = e.detail.formId;
+    let data = e.detail.value
+    data.text = text
+    data.money = mathHelper.multiply(data.money, 100)
+    data.time = data.time.replace('秒', '')
+    data.form_id = e.detail.formId
     app.request('/game/create', data).then((data) => {   
       this.setData({
         gameId: data.gameid,
         orderId: data.orderid,
-        text: e.detail.value.text,
+        text,
         hasPayed: !!data.has_payed,
         para: data.para
       })
+      // 用余额付款时，清除余额缓存
       if (!!data.has_payed) {
         app.clearMoney()
       }
-    }, (error) => {
-      if (error.errmsg) {
+    }).catch((error) => {
+      if (error && error.errmsg) {
         throw new TransactionError(error.errmsg)
       } else {
         throw new TransactionError('生成订单错误，请稍后重试')
       }
     }).then(() => {
       if (!this.data.hasPayed) {
-        return this.pay(JSON.parse(this.data.para));
+        return this.pay(JSON.parse(this.data.para))
       }
     }).then(() => {
-      this.play(this.data.gameId)
+      this.play(this.data.gameId, 1)
     }).catch((error) => {
       if (error && error.name === 'TransactionError') {
         wx.showModal({
-          title: '提示',
+          title: '警告',
           content: error.message,
         })
       } else {
         wx.showModal({
-          title: '提示',
+          title: '警告',
           content: '支付失败',
         })
       } 
-    }).then(function () {  
-      wx.hideLoading();
     })
   },
   checkPay: function (orderId) {
@@ -224,30 +237,29 @@ Page({
     })
   },
   pay: function (data) {
-    const that = this;
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       wx.requestPayment({
         ...data,
-        success: function () {
-          that.checkPay(that.data.orderId).then(() => {
+        success () {
+          this.checkPay(this.data.orderId).then(() => {
             resolve()
           }).catch(() => {
             reject()
           })
         },
-        fail: function () {
-          wx.hideLoading()
+        fail () {
           wx.showModal({
-            title: '提示',
+            title: '警告',
             content: '微信付款失败',
           })
         }
       })
     }) 
   },
+
   onShareAppMessage: function () {
     return {
-      title: '小程序',
+      title: '拼一拼来福',
       path: '/pages/index/index',
       success: function (res) {
         // 转发成功
@@ -255,6 +267,32 @@ Page({
       fail: function (res) {
         // 转发失败
       }
+    }
+  },
+
+  showActivity: function () {
+    wx.navigateTo({
+      url: '/pages/otherpage/otherpage?type=activity',
+    })
+  },
+  offsetLeft: 0,
+  offsetTop: 0,
+  startMove(e) {
+    this.offsetLeft = e.changedTouches[0].pageX - this.data.left
+    this.offsetTop = e.changedTouches[0].pageY - this.data.top
+  },
+
+  move: function (e) {
+    let pos = e.changedTouches[0]
+    if (pos.pageY - this.offsetTop >= 0 &&
+      this.data.windowHeight >= pos.pageY + this.data.initPosData.height - this.offsetTop &&
+      pos.pageX - this.offsetLeft >= 0 &&
+      this.data.windowWidth >= pos.pageX + this.data.initPosData.width - this.offsetLeft
+    ) {
+      this.setData({
+        top: (pos.pageY - this.offsetTop),
+        left: (pos.pageX - this.offsetLeft)
+      })
     }
   }
 })

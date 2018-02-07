@@ -10,21 +10,17 @@ Page({
     inWithdrawals: 0.00
   },
   //事件处理函数
-  onLoad: function () {
+  onLoad () {
 
-    var that = this
     //调用应用实例的方法获取全局数据
-    app.getUserInfo(function (userInfo) {
+    app.getUserInfo((userInfo) => {
       //更新数据
-      that.setData({
-        userInfo: userInfo
+      this.setData({
+        userInfo
       })
     })
   },
   onShow () {
-    wx.showLoading({
-      title: '加载中',
-    })
     app.getMoney().then((data) => {
       this.setData({
         leftmoney: data
@@ -34,11 +30,7 @@ Page({
       this.setData({
         inWithdrawals: (data.money / 100).toFixed(2)
       })
-    }).catch(function () {
-
-    }).then(function () {
-      wx.hideLoading()
-    })
+    }).catch(function () {})
   },
   bindSetValue: function (e) {
     this.setData({
@@ -86,6 +78,9 @@ Page({
     
     app.request('/pay/order_withdraw', {
       money: this.data.withdrawals * 100
+    }, 'GET', {
+      '4': '提现订单不能超过3笔，请稍后再试',
+      '5': '提现金额不能超过余额'
     }).then(function () {
       
       wx.showModal({
@@ -100,26 +95,6 @@ Page({
           })
         }
       })
-    }).catch(function (error) {
-      let message
-      if (error && error.errno) {
-        switch (error.errno) {
-          case 4:
-            message = '提现订单不能超过3笔，请稍后再试'
-            break;
-          case 5:
-            message = '提现金额不能超过余额'
-            break;
-        }
-      }
-      if (message) {
-        wx.showModal({
-          title: '提示',
-          content: message
-        })
-      }
-    }).then(function () {
-      wx.hideLoading()
-    })
+    }).catch(function (error) {})
   }
 })

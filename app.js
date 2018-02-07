@@ -3,55 +3,66 @@ App({
   onLaunch: function () {
     this.globalData.passportInfo = wx.getStorageSync('local-sid');
     if (!this.globalData.passportInfo) {
-      this.login();
+      this.login().then(() => {}).catch(() => {})
     }
   },
 
   login: function () {
     const that = this;
 
-    wx.showLoading({
-      title: '登录中',
-    })
-
     return new Promise(function (resolve, reject) {
+      function login () {
+        wx.showLoading({
+          title: '登录中',
+        })
+        wx.login({
+          success: function (res) {
+            if (res.code) {
+              // 发起网络请求
+              that.thirdLogin(res.code).then(function (data) {
+                wx.hideLoading();
+                wx.setStorageSync('local-sid', data);
+                resolve();
+              }).catch(function () {
+                wx.hideLoading();
+                wx.clearStorageSync('local-sid');
+                wx.showModal({
+                  title: '警告',
+                  content: '登录失败，请查看网络状况，重新登录。',
+                })
+                reject()
+              });
+            }
+          }
+        });
+      }
       // 避免多次请求
-      if (that.globalData.tryLogin) reject();
-      that.globalData.tryLogin = true;
-      wx.login({
-        success: function (res) {
-          if (res.code) {
-            // 发起网络请求
-            that.thirdLogin(res.code).then(function (data) {
-              wx.setStorageSync('local-sid', data);
-              resolve();
-            }).catch(function () {
-              wx.clearStorageSync('local-sid');
-              wx.showModal({
-                title: '警告',
-                content: '登录失败，请查看网络状况，重新登录。',
-              })
-              reject();
-            }).then(function () {
-              wx.hideLoading();
-            });
-
+      if (!that.globalData.login) {
+        that.globalData.login = true
+        login()
+      // 反复检测登陆标识位
+      } else {
+        function tryLogin () {
+          if (!that.globalData.finishLogin) {
+            setTimeout(() => {
+              tryLogin()
+            }, 500)
           } else {
-            wx.showModal({
-              title: '警告',
-              content: '您点击了拒绝授权，无法使用此功能。',
-            })
-            wx.hideLoading();
-            reject();
+            if (that.globalData.passportInfo) {
+              resolve()
+            } else {
+              reject()
+            }
           }
         }
-      });
+        return tryLogin()
+      }
     })
   },
   thirdLogin: function (code) {
     const that = this;
-    return new Promise(function (resolve, reject) {
-      that.getUserInfo(function (userInfo) {
+    return new Promise((resolve, reject) => {
+      this.getUserInfo(function (userInfo) {
         wx.request({
           url: that.globalData.requestUrl + '/login',
           data: {
@@ -82,72 +93,94 @@ App({
     });
   },
 
+  userInfoCallbacks: [],
   getUserInfo: function (cb) {
     var that = this
-    if (this.globalData.userInfo && this.globalData.passportInfo) {
+    if (this.globalData.userInfo) {
       typeof cb == "function" && cb(this.globalData.userInfo)
     } else {
+      if (typeof cb == "function") {
+        this.userInfoCallbacks.push(cb)
+      }
       //调用登录接口
       wx.getUserInfo({
         withCredentials: false,
         success: function (res) {
           that.globalData.userInfo = res.userInfo
-          typeof cb == "function" && cb(that.globalData.userInfo)
+          that.userInfoCallbacks.forEach((cb) => {
+            cb(that.globalData.userInfo)
+          })
+          that.userInfoCallbacks = []
         },
         fail: function () {
           wx.showModal({
             title: '警告',
             content: '您点击了拒绝授权，无法使用此功能。',
           })
+          wx.hideLoading()
         }
       })
     }
   },
 
-  request: function (path, params, method, showCommonError) {
+  request: function (path, params, method, errors) {
     const that = this;
-    showCommonError = showCommonError || 1
-    return new Promise(function (resolve, reject) {
-      wx.request({
-        url: that.globalData.requestUrl + path + '?token=' + (that.globalData.passportInfo ? that.globalData.passportInfo.token : ''),
-        data: params,
-        method: method || 'GET',
-        header: {
-          'content-type': 'application/x-www-form-urlencoded'
-        },
-        success: function ({ statusCode, data }) {
-          if (statusCode === 200) {
-            if (data.errno === 0) {
-              resolve(data);
-            } else if (data.errno === -1) {
-              // 重新登录
-              that.login().then(function () {
-                that.request(path, params, method).then(function (data) {
-                  resolve(data);
-                }).catch(function () {
-                  reject();
+    errors = errors || {}
+    return new Promise((resolve, reject) => {
+      if (path === '/game/create') {
+        reject()
+        return
+      }
+      this.login().then(() => {
+        wx.showLoading({
+          title: '加载中',
+        })
+        wx.request({
+          url: that.globalData.requestUrl + path + '?token=' + (that.globalData.passportInfo ? that.globalData.passportInfo.token : ''),
+          data: params,
+          method: method || 'GET',
+          header: {
+            'content-type': 'application/x-www-form-urlencoded'
+          },
+          success: function ({ statusCode, data }) {
+            if (statusCode === 200) {
+              if (data.errno === 0) {
+                resolve(data)
+              } else if (data.errno === -1) {
+                wx.showModal({
+                  title: '警告',
+                  content: '该功能只能登陆后使用',
+                })
+                reject()
+              } else {
+                let message = errors[data.errno] || '系统异常，请联系客服'
+                wx.showModal({
+                  title: '警告',
+                  content: message,
                 });
-              }).catch(function () {
-                reject();
-              });
+                reject(data);
+              }
             } else {
               wx.showModal({
-                title: '错误提示',
-                content: '网络错误',
+                title: '警告',
+                content: '您的网络有问题哦，请联网后再次请求',
               });
-              reject(data);
+              reject();
             }
-          } else {
+          },
+          fail: function () {
             wx.showModal({
               title: '错误提示',
-              content: '网络错误',
-            });
+              content: '您的网络有问题哦，请联网后再次请求',
+            })
             reject();
-          }      
-        },
-        fail: function () {
-          reject();
-        }
+          },
+          complete: () => {
+            wx.hideLoading()
+          }
+        })
+      }).catch(() => {
+        reject()
       })
     });
   },
@@ -194,9 +227,9 @@ App({
     userInfo: null,
     passportInfo: null,
     systemInfo: null,
-    tryLogin: false,
     leftMoney: null,
     isAuthorization: false,
+    login: false,
     finishLogin: false,
     requestUrl: 'https://moneyminiapp.guolaiwanba.com',
   }

@@ -1,7 +1,8 @@
 //game.js
 //获取应用实例
-var app = getApp()
-var util = require('../../utils/util.js')
+const app = getApp()
+const util = require('../../utils/util.js')
+const mathHelper = require('../../utils/math.js')
 if (!Array.prototype.shuffle) {
   Array.prototype.shuffle = function () {
     for (var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
@@ -41,12 +42,10 @@ Page({
       options
     })
 
-    var that = this
     //调用应用实例的方法获取全局数据
-    
-    app.getUserInfo(function (userInfo) {
+    app.getUserInfo((userInfo) => {
       //更新数据
-      that.setData({
+      this.setData({
         userInfo: userInfo
       })
     })
@@ -61,13 +60,11 @@ Page({
     })
     
   },
+
   onShow: function () {
     
-    wx.showLoading({
-      title: '获取数据中',
-    })
-    this.initGameInfo();
-    this.initSendList();
+    this.initGameInfo()
+    this.initSendList()
 
     app.request('/api/ActivityIsOpen', {}).then((data) => {
       this.setData({
@@ -90,8 +87,7 @@ Page({
           })
         }, 300)
       }
-      
-    })
+    }).catch(() => {})
   },
   initSendList: function () {
     app.request('/game/getSendList', {
@@ -106,7 +102,7 @@ Page({
           }
         })
       })
-    })
+    }).catch(() => {})
   },
   resetModal (textLength) {
     this.setData({
@@ -114,37 +110,34 @@ Page({
     })
   },
   initGameInfo: function () {
-    const that = this;
-    app.request('/game/fetch', { id: this.data.options.id, game: 1 }).then(function (data) {
-      that.setData({
+    app.request('/game/fetch', { id: this.data.options.id, game: 1 }).then((data) => {
+      this.setData({
         gameInfo: data.game,
         hasPlay: data.has_play
       })
-      if (data.game.text.length > 8) that.resetModal(data.game.text.length)
-      if (that.data.options.share == 1) {
-        that.showShare();
+      if (data.game.text.length > 8) this.resetModal(data.game.text.length)
+      if (this.data.options.share == 1) {
+        this.showShare()
       } else {
-        that.initGame();
+        this.initGame()
       }
-    }).catch(function () {
-      that.setData({
+    }).catch(() => {
+      this.setData({
         status: 2
-      });
-    }).then(function () {
-      wx.hideLoading();
-    });
+      })
+    })
   },
   initGame: function () {
-    const game = this.data.gameInfo;
-    let words = [];
+    const game = this.data.gameInfo
+    let words = []
     for (let i = 0; i < game.text.length; i++) {
       words.push({
         text: game.text[i],
         checked: false
       })
     }
-    words.shuffle();
-    game.money = (game.money / 100).toFixed(2);
+    words.shuffle()
+    game.money = (game.money / 100).toFixed(2)
 
     this.setData({
       status: this.data.hasPlay ? 2 : 1,
@@ -155,22 +148,21 @@ Page({
   },
   interval: null,
   showModal: function () {
-    const that = this;
     this.setData({
       showModal: true
     })
 
-    this.interval = setInterval(function () {
-      that.setData({
-        leftTime: that.data.leftTime - 1
+    this.interval = setInterval(() => {
+      this.setData({
+        leftTime: this.data.leftTime - 1
       })
-      if (that.data.leftTime <= 0) {
-        clearInterval(that.interval);
+      if (this.data.leftTime <= 0) {
+        clearInterval(this.interval);
         wx.showToast({
           title: '超时啦',
-          complete: () => {
-            that.initGameInfo();
-            that.hideModal();
+          complete () {
+            this.initGameInfo()
+            this.hideModal()
           }
         })
 
@@ -188,12 +180,11 @@ Page({
     if (this.data.showModal === false) return;
     if (this.data.words[e.target.dataset.index].checked) return;
 
-    var param = {
-      resultWords: this.data.resultWords + this.data.words[e.target.dataset.index].text
-    }
-    var key = 'words[' + e.target.dataset.index + '].checked'
-    param[key] = true
-    this.setData(param)
+    let key = 'words[' + e.target.dataset.index + '].checked'
+    this.setData({
+      resultWords: this.data.resultWords + this.data.words[e.target.dataset.index].text,
+      [key]: true
+    })
     if (this.data.words.length <= this.data.resultWords.length) {
       clearInterval(this.interval);
       this.interval = null;
@@ -202,61 +193,54 @@ Page({
     }
   },
   submit: function () {
+    let message
     if (this.data.resultWords !== this.data.gameInfo.text) {
-      return wx.showModal({
-        title: '提示',
-        content: '文字错啦，请重新拼字',
-        complete: () => {
-          this.initGameInfo()
-        }
-      })
+      message = '文字错啦，请重新拼字'
     }
     if (this.data.gameInfo.time - this.data.leftTime <= 0) {
+      message = '超时啦，请重新拼字'
+    }
+    if (message) {
       return wx.showModal({
         title: '提示',
-        content: '超时啦，请重新拼字',
+        content: message,
         complete: () => {
           this.initGameInfo()
         }
       })
     }
-
-    wx.showLoading({
-      title: '提交中',
-    })   
-
-    const that = this;
 
     app.request('/game/rush', {
       id: this.options.id,
       time: this.data.gameInfo.time - this.data.leftTime,
       text: this.data.resultWords
-    }).then(function (data) {
+    }).then((data) => {
       wx.showModal({
         title: '中奖啦',
-        content: '恭喜获得' + (data.money / 100) + '元红包',
+        content: '恭喜获得' + mathHelper.divide(data.money, 100) + '元红包',
         success: function () {
           app.clearMoney()
         }
       })
-      that.initSendList()
+      this.initSendList()
     }).catch(function (err) {
       if (err && err.errmsg) {
         wx.showModal({
-          title: '提示',
+          title: '警告',
           content: err.errmsg,
         })
       }
-    }).then(function () {
-      that.initGameInfo();
-      wx.hideLoading();
-    });
+    }).then(() => {
+      this.initGameInfo()
+    })
   },
+
   showShare: function () {
     this.setData({
       showShare: true
     })
   },
+
   onShareAppMessage: function () {
     return {
       title: this.data.gameInfo.text,
@@ -269,40 +253,34 @@ Page({
       }
     }
   },
+
   play: function () {
-    this.initGame();
+    this.initGame()
     this.setData({
       showShare: false
     })
   },
+
   picture: function () {
-    wx.setStorageSync('game_info', this.data.gameInfo);
+    wx.setStorageSync('game_info', this.data.gameInfo)
     wx.navigateTo({
       url: '/pages/picture/picture?id=' + this.options.id
-    });
+    })
   },
+
   showActivity: function () {
     wx.navigateTo({
       url: '/pages/otherpage/otherpage?type=activity',
     })
   },
-  bindTap: function (e) {
-    const key = 'questions[' + e.currentTarget.dataset.index + '].hidden';
-    this.setData({
-      [key]: !this.data.questions[e.currentTarget.dataset.index].hidden
-    })
-  },
-
   offsetLeft: 0,
   offsetTop: 0,
   startMove(e) {
     this.offsetLeft = e.changedTouches[0].pageX - this.data.left
     this.offsetTop = e.changedTouches[0].pageY - this.data.top
   },
-
   move: function (e) {
-
-    const pos = e.changedTouches[0]
+    let pos = e.changedTouches[0]
     if (pos.pageY - this.offsetTop >= 0 &&
       this.data.windowHeight >= pos.pageY + this.data.initPosData.height - this.offsetTop &&
       pos.pageX - this.offsetLeft >= 0 &&
