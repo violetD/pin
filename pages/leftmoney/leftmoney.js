@@ -101,10 +101,9 @@ Page({
         }
       })
     }).catch(function (error) {
-      console.log(error)
       let message
       if (error && error.errno) {
-        switch (error.errno) {
+        switch (parseInt(error.errno)) {
           case 4:
             message = '单日提现订单不能超过3笔，请改日再试'
             break;
