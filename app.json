@@ -4,7 +4,6 @@
     "pages/me/me",
     "pages/hongbao/hongbao",
     "pages/leftmoney/leftmoney",
-    "pages/recommend/recommend",
     "pages/game/game",
     "pages/questions/questions",
     "pages/picture/picture",
@@ -14,7 +13,7 @@
   "window":{
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "来福",
+    "navigationBarTitleText": "拼一拼来福",
     "navigationBarTextStyle":"black",
     "backgroundColor": "#ffffff"
   },
