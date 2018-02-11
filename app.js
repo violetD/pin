@@ -115,7 +115,28 @@ App({
         fail: function () {
           wx.showModal({
             title: '警告',
-            content: '您点击了拒绝授权，无法使用此功能。',
+            content: '您点击了拒绝授权，无法使用此功能，点击确定重新获取授权。',
+            success (res) {
+              if (res.confirm) {
+                wx.openSetting({
+                  success: (res) => {
+                    if (res.authSetting["scope.userInfo"]) {////如果用户重新同意了授权登录
+                      wx.getUserInfo({
+                        success: function (res) {
+                          that.globalData.userInfo = res.userInfo
+                          that.userInfoCallbacks.forEach((cb) => {
+                            cb(that.globalData.userInfo)
+                          })
+                          that.userInfoCallbacks = []
+                        }
+                      })
+                    }
+                  },
+                  fail: function (res) {
+                  }
+                })
+              }
+            }
           })
           wx.hideLoading()
         }
