@@ -1,14 +1,14 @@
 //me.js
 //获取应用实例
 const app = getApp()
-const util = require('../../utils/util.js')
+
 Page({
   data: {
     userInfo: {},
     money: '0.00'
   },
   //事件处理函数
-  onLoad: function () {
+  onLoad () {
     //调用应用实例的方法获取全局数据
     app.getUserInfo((userInfo) => {
       //更新数据
