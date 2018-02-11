@@ -21,92 +21,80 @@ Page({
     recieveLoadingShow: false,
   },
   //事件处理函数
-  onLoad: function () {
+  onLoad () {
 
-    var that = this
+    const that = this
     wx.getSystemInfo({
-      success: function (res) {
+      success (res) {
         that.setData({
           clientHeight: res.windowHeight
         })
       }
     })
-    var query = wx.createSelectorQuery().in(that);
-    query.select('.swiper-tab').boundingClientRect(function (rect) {
-      that.setData({
-        swiperTabHeight: rect.height
-      });
 
-    }).exec()
-    query.select('#meInfoView').boundingClientRect(function (rect) {
-      that.setData({
-        meScrollViewHeight: rect.height
-      });
-    }).exec()
-
-    //调用应用实例的方法获取全局数据
-    app.getUserInfo(function (userInfo) {
-      //更新数据
-      that.setData({
-        userInfo: userInfo
+    wx.createSelectorQuery().in(this)
+      .select('.swiper-tab').boundingClientRect()
+      .select('#meInfoView').boundingClientRect().exec((res) => {
+      this.setData({
+        swiperTabHeight: res[0].height,
+        meScrollViewHeight: res[1].height
       })
     })
 
-    wx.showLoading({
-      title: '加载中',
+    //调用应用实例的方法获取全局数据
+    app.getUserInfo((userInfo) => {
+      //更新数据
+      this.setData({
+        userInfo
+      })
     })
+  },
+
+  onShow () {
+
     app.request("/game/getAllSummary").then((data) => {
-      that.setData({
+      this.setData({
         totalMoney: (data.data.money / 100).toFixed(2),
         totalNumber: data.data.num,
       })
-    }).catch(function () {}).then(function () {
-      wx.hideLoading()
-    })
+    }).catch(function () { })
 
-  },
-  onShow () {
     this.loadList()
   },
+
   swichNav: function (e) {
     this.setData({
       currentTab: e.currentTarget.dataset.current
     })
   },
   loaded: false,
-  bindChange: function (e) {
+  bindChange (e) {
     this.setData({
       currentTab: e.detail.current
     })
+    console.log(e.detail)
     if (e.detail.current == 1) {
-      const that = this
-      if (this.loaded) return;
-      this.loaded = true;
-      wx.showLoading({
-        title: '加载中',
-      })
-      app.request("/game/getRecieveSummary").then(function (data) {
-        that.setData({
+      if (this.loaded) return
+      this.loaded = true
+      app.request("/game/getRecieveSummary").then((data) => {
+        this.setData({
           totalRecieveMoney: (data.data.money / 100).toFixed(2),
           totalRecieveNumber: data.data.num,
         })
-      }).catch(function () {
-      }).then(function () {
-        wx.hideLoading();
-      });
-      this.loadRecieveList();
+      }).catch(() => {})
+      this.loadRecieveList()
     }
   },
   meStart: 0,
   meListPageSize: 10,
   meFinished: false,
-  bindMeScroll: function (e) {
-    if (this.meFinished) return;
+  bindMeScroll (e) {
+    if (this.meFinished) return
     
-    this.loadList();
+    this.loadList()
   },
-  loadList: function () {
-    const that = this;
+  loadList () {
+    const that = this
 
     this.setData({
       meLoadingShow: true
@@ -131,10 +119,7 @@ Page({
         }))
       })
       this.meStart += this.meListPageSize;
-    }).catch(function () {
-
-    }).then(function () {
-    })
+    }).catch(function () {})
   },
   recieveStart: 0,
   recieveListPageSize: 10,
@@ -148,9 +133,6 @@ Page({
 
     this.setData({
       recieveLoadingShow: true
-    })
-    wx.showLoading({
-      title: '加载中',
     })
     
     app.request("/game/getRecieveList", {
@@ -172,9 +154,6 @@ Page({
         })
         that.recieveFinished = true;
       }
-    }).catch(function () {
-    }).then(function () {
-      wx.hideLoading();
-    })
+    }).catch(function () {})
   }
 })
