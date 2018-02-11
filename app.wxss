@@ -80,9 +80,6 @@ button[type="app-warn"] {
 }
 
 .hover-btn {
-  position: fixed;
-  left: 0;
-  top: 60%;
   border-radius: 50%;
   display: flex;
   flex-direction: column;

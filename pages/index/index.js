@@ -42,11 +42,6 @@ Page({
     gameId: null,
     leftmoney: '0.00',
     activity: false,
-    top: '60%',
-    left: 0,
-    windowHeight: null,
-    windowWidth: null,
-    initPosData: null
   },
   //事件处理函数
   onLoad (options) {
@@ -66,15 +61,6 @@ Page({
         this.play(this.data.options.id)
       }
     })
-
-    wx.getSystemInfo({
-      success: ({ windowHeight, windowWidth }) => {
-        this.setData({
-          windowHeight,
-          windowWidth
-        })
-      },
-    })
   },
 
   onShow () {
@@ -83,23 +69,6 @@ Page({
       this.setData({
         activity: data.is_open == 1 ? 1 : 0
       })
-      // 由于setData到页面刷新需要时间，这里设置定时
-      if (data.is_open == 1) {
-        setTimeout(() => {
-          let query = wx.createSelectorQuery()
-          query.select('#button').boundingClientRect()
-          query.exec((res) => {
-            this.setData({
-              initPosData: {
-                ...res[0],
-                left: 0
-              },
-              left: 0,
-              top: res[0].top
-            })
-          })
-        }, 300)
-      }
     }).then(() => {
       return app.getMoney()
     }).then((data) => {
@@ -157,7 +126,7 @@ Page({
       showCancel: false,
     })
   },
-  formSubmit: function (e) {
+  formSubmit (e) {
     let text = e.detail.value.text || ''
     text = text.replace(/\s+/g, '')
     if (!text) {
@@ -231,12 +200,12 @@ Page({
       } 
     })
   },
-  checkPay: function (orderId) {
+  checkPay (orderId) {
     return app.request('/pay/check', {
       orderId
     })
   },
-  pay: function (data) {
+  pay (data) {
     return new Promise((resolve, reject) => {
       wx.requestPayment({
         ...data,
@@ -257,42 +226,22 @@ Page({
     }) 
   },
 
-  onShareAppMessage: function () {
+  onShareAppMessage () {
     return {
       title: '拼一拼来福',
       path: '/pages/index/index',
-      success: function (res) {
+      success (res) {
         // 转发成功
       },
-      fail: function (res) {
+      fail (res) {
         // 转发失败
       }
     }
   },
 
-  showActivity: function () {
+  showActivity () {
     wx.navigateTo({
       url: '/pages/otherpage/otherpage?type=activity',
     })
   },
-  offsetLeft: 0,
-  offsetTop: 0,
-  startMove(e) {
-    this.offsetLeft = e.changedTouches[0].pageX - this.data.left
-    this.offsetTop = e.changedTouches[0].pageY - this.data.top
-  },
-
-  move: function (e) {
-    let pos = e.changedTouches[0]
-    if (pos.pageY - this.offsetTop >= 0 &&
-      this.data.windowHeight >= pos.pageY + this.data.initPosData.height - this.offsetTop &&
-      pos.pageX - this.offsetLeft >= 0 &&
-      this.data.windowWidth >= pos.pageX + this.data.initPosData.width - this.offsetLeft
-    ) {
-      this.setData({
-        top: (pos.pageY - this.offsetTop),
-        left: (pos.pageX - this.offsetLeft)
-      })
-    }
-  }
 })

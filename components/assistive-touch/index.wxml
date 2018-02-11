@@ -1,3 +1,0 @@
-<button id="button" hidden="{{ isHide }}" style="top: {{top}}px; left: {{left}}px" type="{{ type }}" class="hover-btn {{ className }}" bindtouchstart="startMove" catchtouchmove="move">
-  <slot></slot>
-</button>

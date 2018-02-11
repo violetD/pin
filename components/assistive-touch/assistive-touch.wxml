@@ -1,0 +1,3 @@
+<view class="hover-view" style="top: {{top}}px; left: {{left}}px;" bindtouchstart="startMove" catchtouchmove="move">
+  <slot></slot>
+</view>
