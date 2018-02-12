@@ -15,22 +15,22 @@
       <view class="sendinfo">
         <view class="sendinfo-item">
           <text class="sendinfo-title">金额(元)</text>
-          <text>{{totalMoney}}</text>
+          <text>{{me.money}}</text>
         </view>
         <view class="sendinfo-item">
           <text class="sendinfo-title">数量(个)</text>
-          <text>{{totalNumber}}</text>
+          <text>{{me.number}}</text>
         </view>
       </view>
     </view>
-    <scroll-view scroll-y="{{true}}" bindscrolltolower="bindMeScroll" style="height:{{clientHeight-swiperTabHeight-meScrollViewHeight}}px">
+    <scroll-view scroll-y="{{true}}" bindscrolltolower="scroll" style="height:{{clientHeight-swiperTabHeight-scrollViewHeight}}px">
       <view class="list">
-        <block wx:for="{{me}}" wx:key="{{index}}">
+        <block wx:for="{{me.list}}" wx:key="{{index}}">
           <navigator url="/pages/game/game?id={{item.game_id}}">
             <view class="item">
               <view class="info">         
                 <view class="text">{{item.text}}</view>
-                <view>{{item.money/100}} 元</view>
+                <view>{{item.money}} 元</view>
               </view>
               <view class="info affiliate">
                 <view>{{item.formatCreateTime}}</view>
@@ -40,7 +40,7 @@
           </navigator>
         </block>
       </view>
-      <view class="loading" style="display:{{meLoadingShow ? 'block' : 'none'}}">{{meLoadingText}}</view>
+      <view class="loading">{{me.text}}</view>
     </scroll-view>
   </swiper-item>
   <!-- 收到的红包 -->
@@ -53,21 +53,21 @@
       <view class="sendinfo">
         <view class="sendinfo-item">
           <text class="sendinfo-title">金额(元)</text>
-          <text>{{totalRecieveMoney}}</text>
+          <text>{{recieve.money}}</text>
         </view>
         <view class="sendinfo-item">
           <text class="sendinfo-title">数量(个)</text>
-          <text>{{totalRecieveNumber}}</text>
+          <text>{{recieve.number}}</text>
         </view>
       </view>
     </view>
-    <scroll-view scroll-y="{{true}}" bindscrolltolower="bindRecieveScroll" style="height:{{clientHeight-swiperTabHeight-meScrollViewHeight}}px">
+    <scroll-view scroll-y="{{true}}" bindscrolltolower="scroll" style="height:{{clientHeight-swiperTabHeight-scrollViewHeight}}px">
       <view class="list">
-        <block wx:for="{{recieve}}" wx:key="{{index}}">
+        <block wx:for="{{recieve.list}}" wx:key="{{index}}">
           <view class="item">
             <view class="info">         
               <view class="text">{{item.text}}</view>
-              <view>{{item.money/100}} 元</view>
+              <view>{{item.money}} 元</view>
             </view>
             <view class="info affiliate">
               <view>{{item.formatCreateTime}}</view>
@@ -75,7 +75,7 @@
           </view>
         </block>
       </view>
-      <view class="loading" style="display:{{recieveLoadingShow ? 'block' : 'none'}}">{{recieveLoadingText}}</view>
+      <view class="loading">{{recieve.text}}</view>
     </scroll-view>
   </swiper-item>
 </swiper>
