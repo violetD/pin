@@ -30,19 +30,19 @@ Page({
       this.setData({
         inWithdrawals: (data.money / 100).toFixed(2)
       })
-    }).catch(function () {})
+    }).catch(() => {})
   },
-  bindSetValue: function (e) {
+  bindSetValue (e) {
     this.setData({
       withdrawals: e.detail.value
     })
   },
-  bindTap: function () {
+  bindTap () {
     this.setData({
       withdrawals: this.data.leftmoney
     })
   },
-  bindWithdrawTap: function () {
+  bindWithdrawTap () {
     const that = this;
     let withdrawals = this.data.withdrawals;
 
@@ -81,20 +81,20 @@ Page({
     }, 'GET', {
       '4': '提现订单不能超过3笔，请稍后再试',
       '5': '提现金额不能超过余额'
-    }).then(function () {
+    }).then(() => {
       
       wx.showModal({
         title: '提示',
         content: '提交提现成功',
-        success: function () {
+        success: () => {
           app.clearMoney()
-          that.setData({
+          this.setData({
             withdrawals: '',
-            leftmoney: (that.data.leftmoney - withdrawals).toFixed(2),
-            inWithdrawals: (that.data.inWithdrawals - 0 + withdrawals).toFixed(2)
+            leftmoney: (this.data.leftmoney - withdrawals).toFixed(2),
+            inWithdrawals: (this.data.inWithdrawals - 0 + withdrawals).toFixed(2)
           })
         }
       })
-    }).catch(function (error) {})
+    }).catch(() => {})
   }
 })
