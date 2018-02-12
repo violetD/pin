@@ -21,42 +21,34 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    const that = this;
+  onLoad (options) {
 
     this.setData({
-      options: options,
+      options,
     })
 
     wx.getSystemInfo({
-      success: function (res) {
-        that.setData({
+      success: (res) => {
+        this.setData({
           windowWidth: res.windowWidth - 30,
           windowHeight: res.windowHeight - 60
-        });
+        })
       }
-    });
+    })
 
-    app.getUserInfo(function (userInfo) {
+    app.getUserInfo((userInfo) => {
       //更新数据
-      that.setData({
-        userInfo: userInfo
+      this.setData({
+        userInfo
       })
     })
 
   },
 
   /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
-  },
-
-  /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow () {
 
     wx.showLoading({
       title: '图片生成中',
@@ -83,7 +75,7 @@ Page({
     this.createImage(charList);
   },
 
-  createImage: function (charList) {
+  createImage (charList) {
     let ctx = wx.createCanvasContext('canvasid');
     let offsetHeight = 120;
     let avatarR = 40;
@@ -117,7 +109,7 @@ Page({
       height += qrR * 2 + this.data.lineHeight;
       this.drawFont(ctx, this.data.footer, height);
       ctx.draw();
-    }).catch(function () {
+    }).catch(() => {
       wx.showModal({
         title: '提示',
         content: '生成图片失败，请稍后再试',
@@ -127,7 +119,7 @@ Page({
     })
   },
 
-  drawCircleImg: function (ctx, src, x, y, r) {
+  drawCircleImg (ctx, src, x, y, r) {
     return new Promise((resolve, reject) => {
       wx.getImageInfo({
         src,
@@ -151,7 +143,7 @@ Page({
 
   },
 
-  drawFont: function (ctx, content, height, fontsize, color) {
+  drawFont (ctx, content, height, fontsize, color) {
     ctx.setFontSize(fontsize || 14);
     ctx.setFillStyle(color || '#ffffff');
     ctx.setTextAlign('center')
@@ -159,61 +151,27 @@ Page({
   },
 
   /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage () {
     return {
       title: this.data.gameInfo.text,
-      path: '/pages/index/index' + (this.data.options.id ? '?id=' + this.data.options.id : ''),
-      success: function (res) {
-        // 转发成功
-      },
-      fail: function (res) {
-        // 转发失败
-      }
+      path: '/pages/index/index' + (this.data.options.id ? '?id=' + this.data.options.id : '')
     }
   },
 
-  saveImageToPhotosAlbum: function () {
+  saveImageToPhotosAlbum () {
     wx.canvasToTempFilePath({
       canvasId: 'canvasid',
-      success: function (res) {   
+      success (res) {   
         wx.saveImageToPhotosAlbum({
           filePath: res.tempFilePath,
-          success: function () {
+          success () {
             wx.showToast({
               title: '已保存',
             })
           },
-          fail: function () {
+          fail () {
             wx.showModal({
               title: '提示',
               content: '保存图片失败',
@@ -221,7 +179,7 @@ Page({
           }
         })
       },
-      fail: function (res) {
+      fail () {
         wx.showModal({
           title: '提示',
           content: '保存图片失败',
