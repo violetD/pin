@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "拼一拼来福-常见问题"
+  "navigationBarTitleText": "拼一拼来福-常见问题",
+  "usingComponents": {
+    "assistive-touch": "../../components/assistive-touch/assistive-touch"
+  }
 }

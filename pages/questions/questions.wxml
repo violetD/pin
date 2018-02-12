@@ -13,7 +13,10 @@
   </block>
 </view>
 
-<button id="button" class="hover-btn" style="top: {{top}}px; left: {{left}}px" type="primary" bindtap="showService" bindtouchstart="startMove" catchtouchmove="move">
-  <i class="iconfont icon-wechat"></i>
-  <text>客服</text>
-</button>
+
+<assistive-touch width="128rpx" height="128rpx" initTop="80%" initLeft="0">
+  <button class="hover-btn" type="primary" bindtap="showService">
+    <i class="iconfont icon-wechat"></i>
+    <text>客服</text>
+  </button>
+</assistive-touch>
