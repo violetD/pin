@@ -29,12 +29,7 @@ Page({
     hasPlay: false,
     list: [],
     marginTop: '-250rpx',
-    activity: false,
-    top: '60%',
-    left: 0,
-    windowHeight: null,
-    windowWidth: null,
-    initPosData: null
+    activity: false
   },
   //事件处理函数
   onLoad: function (options) {
@@ -46,19 +41,9 @@ Page({
     app.getUserInfo((userInfo) => {
       //更新数据
       this.setData({
-        userInfo: userInfo
+        userInfo
       })
-    })
-
-    wx.getSystemInfo({
-      success: ({ windowHeight, windowWidth }) => {
-        this.setData({
-          windowHeight,
-          windowWidth
-        })
-      },
-    })
-    
+    })  
   },
 
   onShow: function () {
@@ -70,23 +55,6 @@ Page({
       this.setData({
         activity: data.is_open == 1 ? 1 : 0
       })
-
-      if (data.is_open == 1) {
-        setTimeout(() => {
-          let query = wx.createSelectorQuery()
-          query.select('#button').boundingClientRect()
-          query.exec((res) => {
-            this.setData({
-              initPosData: {
-                ...res[0],
-                left: 0
-              },
-              left: 0,
-              top: res[0].top
-            })
-          })
-        }, 300)
-      }
     }).catch(() => {})
   },
   initSendList: function () {
@@ -272,24 +240,5 @@ Page({
     wx.navigateTo({
       url: '/pages/otherpage/otherpage?type=activity',
     })
-  },
-  offsetLeft: 0,
-  offsetTop: 0,
-  startMove(e) {
-    this.offsetLeft = e.changedTouches[0].pageX - this.data.left
-    this.offsetTop = e.changedTouches[0].pageY - this.data.top
-  },
-  move: function (e) {
-    let pos = e.changedTouches[0]
-    if (pos.pageY - this.offsetTop >= 0 &&
-      this.data.windowHeight >= pos.pageY + this.data.initPosData.height - this.offsetTop &&
-      pos.pageX - this.offsetLeft >= 0 &&
-      this.data.windowWidth >= pos.pageX + this.data.initPosData.width - this.offsetLeft
-    ) {
-      this.setData({
-        top: (pos.pageY - this.offsetTop),
-        left: (pos.pageX - this.offsetLeft)
-      })
-    }
   }
 })

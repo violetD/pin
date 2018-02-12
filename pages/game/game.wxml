@@ -99,7 +99,9 @@
   </view>
 </view>
 
-<button id="button" hidden="{{!activity}}" style="top: {{top}}px; left: {{left}}px" type="app-primary" class="hover-btn shake-slow" bindtap="showActivity" bindtouchstart="startMove" catchtouchmove="move">
-  <i class="iconfont icon-hongbao"></i>
-  <text>活动</text>
-</button>
+<assistive-touch width="128rpx" height="128rpx" initTop="60%" initLeft="0">
+  <button hidden="{{!activity}}" type="app-primary" class="hover-btn shake-slow" bindtap="showActivity">
+    <i class="iconfont icon-hongbao"></i>
+    <text>活动</text>
+  </button>
+</assistive-touch>
