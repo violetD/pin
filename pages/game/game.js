@@ -286,12 +286,6 @@ Page({
       url: '/pages/otherpage/otherpage?type=activity',
     })
   },
-  bindTap: function (e) {
-    const key = 'questions[' + e.currentTarget.dataset.index + '].hidden';
-    this.setData({
-      [key]: !this.data.questions[e.currentTarget.dataset.index].hidden
-    })
-  },
 
   offsetLeft: 0,
   offsetTop: 0,
